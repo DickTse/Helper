@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v1.1",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v1.1": {
+      "helperdemo/1.0.0": {
+        "dependencies": {
+          "Helper": "1.0.0"
+        },
+        "runtime": {
+          "HelperDemo.dll": {}
+        }
+      },
+      "helper/1.0.0": {
+        "runtime": {
+          "Helper.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "helperdemo/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "helper/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
