@@ -2266,21 +2266,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
-      },
-      "Helper/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.4",
-        "dependencies": {
-          "Microsoft.CSharp": "4.3.0",
-          "NETStandard.Library": "1.6.1",
-          "System.Dynamic.Runtime": "4.3.0"
-        },
-        "compile": {
-          "bin/placeholder/netstandard1.4/Helper.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/netstandard1.4/Helper.dll": {}
-        }
       }
     }
   },
@@ -7044,17 +7029,12 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
-    },
-    "Helper/1.0.0": {
-      "type": "project",
-      "path": "../Helper/Helper.csproj",
-      "msbuildProject": "../Helper/Helper.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v1.1": [
-      "Helper >= 1.0.0",
-      "Microsoft.NETCore.App >= 1.1.2"
+      "Microsoft.NETCore.App >= 1.1.2",
+      "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj"
     ]
   },
   "packageFolders": {
@@ -7063,22 +7043,22 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\HelperDemo.csproj",
+      "projectUniqueName": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\HelperDemo.csproj",
       "projectName": "HelperDemo",
-      "projectPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\HelperDemo.csproj",
-      "outputPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\obj\\",
+      "projectPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\HelperDemo.csproj",
+      "outputPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"
       ],
       "files": {
-        "lib/netcoreapp1.1/HelperDemo.dll": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\bin\\placeholder\\netcoreapp1.1\\HelperDemo.dll"
+        "lib/netcoreapp1.1/HelperDemo.dll": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\HelperDemo\\bin\\placeholder\\netcoreapp1.1\\HelperDemo.dll"
       },
       "frameworks": {
         "netcoreapp1.1": {
           "projectReferences": {
-            "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj": {
-              "projectPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj"
+            "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj": {
+              "projectPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj"
             }
           }
         }

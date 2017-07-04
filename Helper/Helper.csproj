@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.4'">
+  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
   </ItemGroup>

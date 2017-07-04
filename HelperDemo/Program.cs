@@ -35,8 +35,8 @@ namespace Helper.Demo
             Console.WriteLine("Input Raw Strings");
             Console.WriteLine("-----------------");
             string[] rows = new string[] {
-                "A123456(7)CHAN TAI MAN        10020170315",
-                "B319191(9)LAM CHI CHUNG       32 20170523"
+                "A123456(7)CHAN TAI MAN        10015032017",
+                "B319191(9)LAM CHI CHUNG       32 23052017"
             };
             foreach (string row in rows)
                 Console.WriteLine(row);
@@ -50,7 +50,7 @@ namespace Helper.Demo
                 new FixedLengthField<string>("HKID", 10),
                 new FixedLengthField<string>("Name", 20),
                 new FixedLengthField<int>("Age", 3),
-                new FixedLengthField<DateTime>("DOB", 8) { DateTimeFormatString = "ayyyyMMdd" }
+                new FixedLengthField<DateTime>("DOB", 8) { DateTimeFormatString = "ddMMyyyy" }
             };
 
             foreach (string row in rows)
@@ -81,7 +81,6 @@ namespace Helper.Demo
                 new FixedLengthField<DateTime>("ChequeDate", 20) 
                 {
                     PaddingCharPosition = PaddingCharPosition.Left, 
-                    DateTimeFormatString = "yyyyMMdd",
                     Value = DateTime.ParseExact("20170301", "yyyyMMdd", CultureInfo.InvariantCulture) 
                 }
             };
