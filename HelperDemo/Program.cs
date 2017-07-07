@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using Helper.Configuration;
 using Helper.Text;
 
 namespace Helper.Demo
@@ -9,6 +10,7 @@ namespace Helper.Demo
     {
         static void Main(string[] args)
         {
+            DemoReadConfigurationsFromIniFile("E:\\temp\\test.ini");
             DemoBuildingFixedFieldStringFromGivenRawStrings();
             Console.WriteLine();
             Console.WriteLine("Press any key to continue...");
@@ -22,6 +24,14 @@ namespace Helper.Demo
             DemoChangingFieldValueByUsingIndexerProperty();
             Console.WriteLine();
             Console.WriteLine("Press any key to exit the application...");
+            Console.ReadKey();
+        }
+
+        private static void DemoReadConfigurationsFromIniFile(string path)
+        {
+            IniFile ini = new IniFile(path);
+            foreach (KeyValuePair<string, string> kvp in ini.ReadAllKeysAndValues("General"))
+                Console.WriteLine(kvp.Key + ", " + kvp.Value);
             Console.ReadKey();
         }
 
