@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using Helper.Configuration;
@@ -10,7 +11,7 @@ namespace Helper.Demo
     {
         static void Main(string[] args)
         {
-            DemoReadConfigurationsFromIniFile("E:\\temp\\test.ini");
+            DemoReadConfigurationsFromIniFile("C:\\temp\\test.ini");
             DemoBuildingFixedFieldStringFromGivenRawStrings();
             Console.WriteLine();
             Console.WriteLine("Press any key to continue...");
