@@ -5,14 +5,15 @@ using System.Globalization;
 namespace Helper.Text
 {
     /// <summary>
-    /// Provides a means for setting the definition of a fixed-length field and storing the value of the field.
+    /// A class for setting the definition of a fixed-length field and storing the value of the field.
     /// </summary>
     public class FixedLengthField<T> : IFixedLengthField where T : IConvertible
     {
         private const string DefaultDateTimeFormatString = "yyyyMMdd";
+        private const char DefaultPaddingChar = ' ';
 
         private int length = 0;
-        private char paddingChar;
+        private char paddingChar = DefaultPaddingChar;
         private PaddingCharPosition paddingCharPosition = PaddingCharPosition.Right;
         private string paddedString = String.Empty;
         private T value;

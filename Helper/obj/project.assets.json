@@ -4057,16 +4057,16 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
+      "projectUniqueName": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
       "projectName": "Helper",
-      "projectPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
-      "outputPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\obj\\",
+      "projectPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
+      "outputPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netstandard1.4"
       ],
       "files": {
-        "lib/netstandard1.4/Helper.dll": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\bin\\placeholder\\netstandard1.4\\Helper.dll"
+        "lib/netstandard1.4/Helper.dll": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\bin\\placeholder\\netstandard1.4\\Helper.dll"
       },
       "frameworks": {
         "netstandard1.4": {
