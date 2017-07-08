@@ -72,15 +72,6 @@ namespace Helper.Configuration
             string[] parameters = Encoding.ASCII.GetString(buffer)
                 .Trim('\0')
                 .Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
-            //return parameters
-            //    .Where(p => p.IndexOf('=') >= 0)
-            //    .Select(p =>
-            //        new
-            //        {
-            //            Key = p.Substring(0, p.IndexOf('=')),
-            //            Value = p.Substring(p.IndexOf('=') + 1)
-            //        })
-            //    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             var paramToReturn = parameters.Select(p => new { Str = p, EqualSignIndex = p.IndexOf('=') });
             return paramToReturn
                 .Where(p => p.EqualSignIndex >= 0)
