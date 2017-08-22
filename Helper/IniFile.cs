@@ -9,6 +9,9 @@ namespace Helper.Configuration
 {
     public class IniFile
     {
+        private const int SingleValueSize = 255;
+        private const int SectionBufferSize = 2048;
+
         [DllImport("kernel32")]
         private static extern bool WritePrivateProfileString(
             string lpAppName, string lpKeyName, string lpString, string lpFilename);
@@ -61,7 +64,7 @@ namespace Helper.Configuration
         /// <returns>The value if the key exists; otherwise, the default value.</returns>
         public T ReadValue<T>(string section, string key, T defaultValue = default(T)) where T : IConvertible
         {
-            StringBuilder value = new StringBuilder(255);
+            StringBuilder value = new StringBuilder(SingleValueSize);
             GetPrivateProfileString(section, key, Convert.ToString(defaultValue), value, 255, Path);
             return (T)Convert.ChangeType(value, typeof(T));
         }
@@ -73,8 +76,8 @@ namespace Helper.Configuration
         /// <returns>A set of parameter keys and values.</returns>
         public IDictionary<string, T> ReadAllKeysAndValues<T>(string section) where T : IConvertible
         {
-            byte[] buffer = new byte[2048];
-            GetPrivateProfileSection(section, buffer, 2048, Path);
+            byte[] buffer = new byte[SectionBufferSize];
+            GetPrivateProfileSection(section, buffer, SectionBufferSize, Path);
             string[] parameters = Encoding.ASCII.GetString(buffer)
                 .Trim('\0')
                 .Split(new[] { '\0' }, StringSplitOptions.RemoveEmptyEntries);
