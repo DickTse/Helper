@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -32,6 +33,11 @@ namespace Helper.Configuration
         /// <param name="path">Path of the INI file.</param>
         public IniFile(string path)
         {
+            if (path == null) 
+                throw new ArgumentNullException(nameof(path), "Path of ini file cannot be null.");
+            if (!File.Exists(path))
+                throw new FileNotFoundException("Ini file does not exist.", path);
+                
             this.Path = path;
         }
 
@@ -41,9 +47,9 @@ namespace Helper.Configuration
         /// <param name="section">Section name.</param>
         /// <param name="key">Parameter key.</param>
         /// <param name="value">Value to be set.</param>
-        public void WriteValue(string section, string key, string value)
+        public void WriteValue<T>(string section, string key, T value) where T : IConvertible
         {
-            WritePrivateProfileString(section, key, value, Path);
+            WritePrivateProfileString(section, key, Convert.ToString(value), Path);
         }
 
         /// <summary>
@@ -53,11 +59,11 @@ namespace Helper.Configuration
         /// <param name="key">Parameter key.</param>
         /// <param name="defaultValue">Default value to be returned if the key does not exist.</param>
         /// <returns>The value if the key exists; otherwise, the default value.</returns>
-        public string ReadValue(string section, string key, string defaultValue = null)
+        public T ReadValue<T>(string section, string key, T defaultValue = default(T)) where T : IConvertible
         {
             StringBuilder value = new StringBuilder(255);
-            GetPrivateProfileString(section, key, defaultValue, value, 255, Path);
-            return value.ToString();
+            GetPrivateProfileString(section, key, Convert.ToString(defaultValue), value, 255, Path);
+            return (T)Convert.ChangeType(value, typeof(T));
         }
 
         /// <summary>
@@ -65,7 +71,7 @@ namespace Helper.Configuration
         /// </summary>
         /// <param name="section">Section name.</param>
         /// <returns>A set of parameter keys and values.</returns>
-        public IDictionary<string, string> ReadAllKeysAndValues(string section)
+        public IDictionary<string, T> ReadAllKeysAndValues<T>(string section) where T : IConvertible
         {
             byte[] buffer = new byte[2048];
             GetPrivateProfileSection(section, buffer, 2048, Path);
@@ -79,7 +85,7 @@ namespace Helper.Configuration
                     new
                     {
                         Key = p.Str.Substring(0, p.EqualSignIndex),
-                        Value = p.Str.Substring(p.EqualSignIndex + 1)
+                        Value = (T)Convert.ChangeType(p.Str.Substring(p.EqualSignIndex + 1), typeof(T))
                     })
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }

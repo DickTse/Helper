@@ -30,8 +30,15 @@ namespace Helper.Demo
 
         private static void DemoReadConfigurationsFromIniFile(string path)
         {
+            Console.WriteLine("=====================================================");
+            Console.WriteLine("Reading all configurations from a section in INI file");
+            Console.WriteLine("=====================================================");
+
             IniFile ini = new IniFile(path);
-            foreach (KeyValuePair<string, string> kvp in ini.ReadAllKeysAndValues("General"))
+            Console.WriteLine();
+            Console.WriteLine("INI parameters and values");
+            Console.WriteLine("-------------------------");
+            foreach (var kvp in ini.ReadAllKeysAndValues<string>("General"))
                 Console.WriteLine(kvp.Key + ", " + kvp.Value);
             Console.ReadKey();
         }

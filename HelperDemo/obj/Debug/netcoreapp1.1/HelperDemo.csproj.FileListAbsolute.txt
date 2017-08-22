@@ -8,3 +8,4 @@ D:\Users\阿迪\Documents\Visual Studio Code\Helper\HelperDemo\bin\Debug\netcore
 D:\Users\阿迪\Documents\Visual Studio Code\Helper\HelperDemo\obj\Debug\netcoreapp1.1\HelperDemo.AssemblyInfo.cs
 D:\Users\阿迪\Documents\Visual Studio Code\Helper\HelperDemo\obj\Debug\netcoreapp1.1\HelperDemo.dll
 D:\Users\阿迪\Documents\Visual Studio Code\Helper\HelperDemo\obj\Debug\netcoreapp1.1\HelperDemo.pdb
+d:\Users\阿迪\Documents\Visual Studio Code\Helper\HelperDemo\obj\Debug\netcoreapp1.1\HelperDemo.csproj.CoreCompileInputs.cache
