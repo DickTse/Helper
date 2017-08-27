@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using Helper.Configuration;
+using Helper.Optimization;
 using Helper.Text;
 
 namespace Helper.Demo
@@ -11,6 +12,10 @@ namespace Helper.Demo
     {
         static void Main(string[] args)
         {
+            DemoBenchmarkTimer();
+            Console.WriteLine();
+            ConsoleHelper.Pause();
+            Console.WriteLine();
             DemoEventHandlerHelperRaise();
             Console.WriteLine();
             ConsoleHelper.Pause();
@@ -30,6 +35,56 @@ namespace Helper.Demo
             DemoChangingFieldValueByUsingIndexerProperty();
             Console.WriteLine();
             ConsoleHelper.Pause();
+        }
+
+        private static void DemoBenchmarkTimer()
+        {
+            Console.WriteLine("=============================================");
+            Console.WriteLine("Demonstrating how to use BenchmarkTimer class");
+            Console.WriteLine("=============================================");
+
+            Console.WriteLine();
+            const int benchmarkCycles = 100000000;
+            SimpleBenchmarking.Benchmark("List<Int32>", () =>
+            {
+                List<Int32> l = new List<Int32>();
+                for (int i = 0; i < benchmarkCycles; i++)
+                {
+                    l.Add(i);
+                    int x = l[i];
+                }
+                l = null;
+            });
+            SimpleBenchmarking.Benchmark("List<object> of Int32", () =>
+            {
+                List<object> l = new List<object>();
+                for (int i = 0; i < benchmarkCycles; i++)
+                {
+                    l.Add(i);
+                    int x = (int)l[i];
+                }
+                l = null;
+            });
+            SimpleBenchmarking.Benchmark("List<string>", () =>
+            {
+                List<string> l = new List<string>();
+                for (int i = 0; i < benchmarkCycles; i++)
+                {
+                    l.Add("X");
+                    string s = l[i];
+                }
+                l = null;
+            });
+            SimpleBenchmarking.Benchmark("List<object> of string", () =>
+            {
+                List<object> l = new List<object>();
+                for (int i = 0; i < benchmarkCycles; i++)
+                {
+                    l.Add("X");
+                    string s = (string)l[i];
+                }
+                l = null;
+            });
         }
 
         private static void DemoEventHandlerHelperRaise()
