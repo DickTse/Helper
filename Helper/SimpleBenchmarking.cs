@@ -9,7 +9,7 @@ namespace Helper.Optimization
     public static class SimpleBenchmarking
     {
         /// <summary>
-        /// Benchmark an action, and display the elapsed time and number of collections GC has taken at the end.
+        /// Benchmark an action, and display the elapsed time and the number of collections GC has taken at the end.
         /// </summary>
         /// <param name="actionName">Name of the action that will be displayed along with the result.</param>
         /// <param name="action">The actual action to be benchmarked.</param>
