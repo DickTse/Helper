@@ -1,6 +1,7 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
+      "C:\\Users\\dickt\\.dotnet\\store\\|arch|\\|tfm|",
       "C:\\Users\\dickt\\.nuget\\packages"
     ]
   }

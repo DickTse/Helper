@@ -5,3 +5,4 @@ D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard
 D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.dll
 D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.pdb
 d:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.csproj.CoreCompileInputs.cache
+d:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.AssemblyInfoInputs.cache

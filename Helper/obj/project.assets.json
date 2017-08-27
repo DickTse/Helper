@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "targets": {
     ".NETStandard,Version=v1.4": {
       "Microsoft.CSharp/4.3.0": {
@@ -4052,26 +4052,41 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dickt\\.nuget\\packages\\": {}
+    "C:\\Users\\dickt\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
+      "projectUniqueName": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
       "projectName": "Helper",
-      "projectPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
-      "outputPath": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\obj\\",
+      "projectPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\Helper.csproj",
+      "packagesPath": "C:\\Users\\dickt\\.nuget\\packages\\",
+      "outputPath": "d:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\dickt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
       "originalTargetFrameworks": [
         "netstandard1.4"
       ],
-      "files": {
-        "lib/netstandard1.4/Helper.dll": "D:\\Users\\阿迪\\Documents\\Visual Studio Code\\Helper\\Helper\\bin\\placeholder\\netstandard1.4\\Helper.dll"
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netstandard1.4": {
           "projectReferences": {}
         }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
       }
     },
     "frameworks": {
@@ -4079,7 +4094,8 @@
         "dependencies": {
           "NETStandard.Library": {
             "target": "Package",
-            "version": "1.6.1"
+            "version": "1.6.1",
+            "autoReferenced": true
           },
           "Microsoft.CSharp": {
             "target": "Package",

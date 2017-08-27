@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.1": {
-      "helperdemo/1.0.0": {
+      "HelperDemo/1.0.0": {
         "dependencies": {
           "Helper": "1.0.0"
         },
@@ -14,7 +14,7 @@
           "HelperDemo.dll": {}
         }
       },
-      "helper/1.0.0": {
+      "Helper/1.0.0": {
         "runtime": {
           "Helper.dll": {}
         }
@@ -22,12 +22,12 @@
     }
   },
   "libraries": {
-    "helperdemo/1.0.0": {
+    "HelperDemo/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "helper/1.0.0": {
+    "Helper/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

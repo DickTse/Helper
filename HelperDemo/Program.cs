@@ -11,21 +11,43 @@ namespace Helper.Demo
     {
         static void Main(string[] args)
         {
-            DemoReadConfigurationsFromIniFile("C:\\temp\\test.ini");
+            DemoEventHandlerHelperRaise();
+            Console.WriteLine();
+            ConsoleHelper.Pause();
+            Console.WriteLine();
+            // DemoReadConfigurationsFromIniFile("C:\\temp\\test.ini");
+            // Console.WriteLine();
+            // ConsoleHelper.Pause();
+            // Console.WriteLine();
             DemoBuildingFixedFieldStringFromGivenRawStrings();
             Console.WriteLine();
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            ConsoleHelper.Pause();
             Console.WriteLine();
             DemoBuildingStringFromGivenFixedLengthFieldValues();
             Console.WriteLine();
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
+            ConsoleHelper.Pause();
             Console.WriteLine();
             DemoChangingFieldValueByUsingIndexerProperty();
             Console.WriteLine();
-            Console.WriteLine("Press any key to exit the application...");
-            Console.ReadKey();
+            ConsoleHelper.Pause();
+        }
+
+        private static void DemoEventHandlerHelperRaise()
+        {
+            Console.WriteLine("========================================================");
+            Console.WriteLine("Demonstrating how to use EventHandlerHelper.Raise method");
+            Console.WriteLine("========================================================");
+
+            Console.WriteLine();
+            Car car = new Car("AB1234");
+            car.Started += CarStarted;
+            car.Start();
+            car.Started -= CarStarted;
+        }
+
+        private static void CarStarted(object sender, CarStartedEventArgs e)
+        {
+            Console.WriteLine($"Car {e.LicenseNumber} is started.");
         }
 
         private static void DemoReadConfigurationsFromIniFile(string path)
@@ -40,7 +62,6 @@ namespace Helper.Demo
             Console.WriteLine("-------------------------");
             foreach (var kvp in ini.ReadAllKeysAndValues<string>("General"))
                 Console.WriteLine(kvp.Key + ", " + kvp.Value);
-            Console.ReadKey();
         }
 
         private static void DemoBuildingFixedFieldStringFromGivenRawStrings()
