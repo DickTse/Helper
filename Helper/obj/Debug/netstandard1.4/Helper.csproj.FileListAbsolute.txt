@@ -1,8 +1,0 @@
-D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\bin\Debug\netstandard1.4\Helper.deps.json
-D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\bin\Debug\netstandard1.4\Helper.dll
-D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\bin\Debug\netstandard1.4\Helper.pdb
-D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.AssemblyInfo.cs
-D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.dll
-D:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.pdb
-d:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.csproj.CoreCompileInputs.cache
-d:\Users\阿迪\Documents\Visual Studio Code\Helper\Helper\obj\Debug\netstandard1.4\Helper.AssemblyInfoInputs.cache
