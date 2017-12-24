@@ -11,6 +11,7 @@ namespace Helper.Text
     {
         private const string DefaultDateTimeFormatString = "yyyyMMdd";
         private const char DefaultPaddingChar = ' ';
+        private const int UndefinedFieldLength = -1;
 
         private int length = 0;
         private char paddingChar = DefaultPaddingChar;
@@ -38,6 +39,10 @@ namespace Helper.Text
             }
             private set
             {
+                if (typeof(T) == typeof(DateTime))
+                {
+                    throw new ArgumentException("Length property should not be assigned for any DateTime FieldLengthField object.");
+                }
                 length = value;
                 SetPaddedString();
             } 
@@ -168,11 +173,24 @@ namespace Helper.Text
         /// Constructor of a fixed-length-field object.
         /// </summary>
         /// <param name="name">Field name.</param>
-        /// <param name="length">Length of field value, including all leading or trailing padding character.</param>
-        public FixedLengthField(string name, int length)
+        /// <param name="length">
+        /// Length of field value, including all leading or trailing padding character.
+        /// If the type of the FixedLengthField is DateTime, value of length argument is irrelevant. In this case, value of <see cref="DateTimeFormatString"/> will be assigned to <see cref="Length"/> instead. 
+        /// </param>
+        public FixedLengthField(string name, int length = UndefinedFieldLength)
         {
-            this.Name = name;
-            this.length = length;
+            if (typeof(T) == typeof(DateTime))
+            {
+                if (length != UndefinedFieldLength)
+                    throw new ArgumentException("Length should not be defined for any DateTime FieldLengthField object.");
+                this.Name = name;
+                this.length = DateTimeFormatString.Length;
+            }
+            else
+            { 
+                this.Name = name;
+                this.length = length;
+            }
         }
     }
 }
