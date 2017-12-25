@@ -141,10 +141,11 @@ namespace Helper.Demo
             Stopwatch sw =new Stopwatch();
             sw.Start();
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<string>("HKID", 10),
-                new FixedLengthField<string>("Name", 20),
-                new FixedLengthField<int>("Age", 3),
-                new FixedLengthField<DateTime>("DOB", 8) { DateTimeFormatString = "ddMMyyyy" }
+                new FixedLengthStringField("HKID", 10),
+                new FixedLengthStringField("Name", 20),
+                new FixedLengthInt32Field("Age", 3),
+                //new FixedLengthField<DateTime>("DOB", 8) { DateTimeFormatString = "ddMMyyyy" }
+                new FixedLengthDateTimeField("DOB", "ddMMyyyy")
             };
 
             foreach (string row in rows)
@@ -170,9 +171,9 @@ namespace Helper.Demo
             Stopwatch sw =new Stopwatch();
             sw.Start();
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<string>("UID", 22) { Value = "2017052200410030001100" },
-                new FixedLengthField<Int64>("Amount", 13) { PaddingCharPosition = PaddingCharPosition.Left, PaddingChar = '0', Value = 1234 },
-                new FixedLengthField<DateTime>("ChequeDate", 20) 
+                new FixedLengthStringField("UID", 22) { Value = "2017052200410030001100" },
+                new FixedLengthInt64Field("Amount", 13) { PaddingCharPosition = PaddingCharPosition.Left, PaddingChar = '0', Value = 1234 },
+                new FixedLengthDateTimeField("ChequeDate", 20) 
                 {
                     PaddingCharPosition = PaddingCharPosition.Left, 
                     Value = DateTime.ParseExact("20170301", "yyyyMMdd", CultureInfo.InvariantCulture) 
@@ -202,9 +203,9 @@ namespace Helper.Demo
             Console.WriteLine("---------------------------");
             Stopwatch sw =new Stopwatch();
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<string>("Staff ID", 10) { Value = "AB223345" },
-                new FixedLengthField<string>("Name", 20) { Value = "CHAN TAI MAN" },
-                new FixedLengthField<Int64>("Salary", 13) { PaddingCharPosition = PaddingCharPosition.Left, PaddingChar = '0', Value = 1000000 }
+                new FixedLengthStringField("Staff ID", 10) { Value = "AB223345" },
+                new FixedLengthStringField("Name", 20) { Value = "CHAN TAI MAN" },
+                new FixedLengthInt64Field("Salary", 13) { PaddingCharPosition = PaddingCharPosition.Left, PaddingChar = '0', Value = 1000000 }
             };
             foreach (var field in fields)
                 Console.WriteLine(field.Name + ": |" + field.Value + "|");

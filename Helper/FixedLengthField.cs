@@ -7,22 +7,22 @@ namespace Helper.Text
     /// <summary>
     /// A class for setting the definition of a fixed-length field and storing the value of the field.
     /// </summary>
-    public class FixedLengthField<T> : IFixedLengthField where T : IConvertible
+    public abstract class FixedLengthField<T> : IFixedLengthField where T : IConvertible
     {
-        private const string DefaultDateTimeFormatString = "yyyyMMdd";
-        private const char DefaultPaddingChar = ' ';
-        private const int UndefinedFieldLength = -1;
-
-        private int length = 0;
-        private char paddingChar = DefaultPaddingChar;
-        private PaddingCharPosition paddingCharPosition = PaddingCharPosition.Right;
-        private string paddedString = String.Empty;
-        private T value;
+        /// <summary>
+        /// The default value of <see cref="paddingChar"/>.
+        /// </summary>
+        protected const char DefaultPaddingChar = ' ';
 
         /// <summary>
         /// Field name.
         /// </summary>
         public string Name { get; private set; }
+
+        /// <summary>
+        /// The backing field of <see cref="Length"/>.
+        /// </summary>
+        protected int length;
 
         /// <summary>
         /// Field Length.
@@ -31,22 +31,23 @@ namespace Helper.Text
         /// The pre-defined field length. All the characters in the actual value, and leading characters / trailing 
         /// characters are counted.
         /// </value>
-        public int Length 
+        public virtual int Length 
         { 
             get
             {
                 return length;
             }
-            private set
+            protected set
             {
-                if (typeof(T) == typeof(DateTime))
-                {
-                    throw new ArgumentException("Length property should not be assigned for any DateTime FieldLengthField object.");
-                }
                 length = value;
                 SetPaddedString();
             } 
         }
+
+        /// <summary>
+        /// The backing field of <see cref="PaddingChar"/>
+        /// </summary>
+        protected char paddingChar = DefaultPaddingChar;
 
         /// <summary>
         /// The leading / trailing character that is padded to the field.
@@ -66,6 +67,11 @@ namespace Helper.Text
         }
 
         /// <summary>
+        /// The backing field of <see cref="PaddingCharPosition"/>.
+        /// </summary>
+        protected PaddingCharPosition paddingCharPosition = PaddingCharPosition.Right;
+
+        /// <summary>
         /// The position of the padding character to be padded to the field.
         /// </summary>
         public PaddingCharPosition PaddingCharPosition 
@@ -83,6 +89,11 @@ namespace Helper.Text
         }
 
         /// <summary>
+        /// The backing field of <see cref="PaddedString"/>.
+        /// </summary>
+        protected string paddedString = String.Empty;
+
+        /// <summary>
         /// The raw string the includes the actual value of the field, together leading or trailing padding character(s).
         /// </summary>
         public string PaddedString 
@@ -97,6 +108,11 @@ namespace Helper.Text
                 SetValue();
             } 
         }
+
+        /// <summary>
+        /// The backing field of <see cref="Value"/>.
+        /// </summary>
+        protected T value;
 
         /// <summary>
         /// The actual value of the field. The type of value is determined at runtime. It is identical to the generic type 
@@ -116,17 +132,36 @@ namespace Helper.Text
             }
         }
 
-        private void SetPaddedString()
+        /// <summary>
+        /// Update the value of <see cref="paddedString"/> while the value of <see cref="Length"/>, <see cref="PaddingChar"/>,
+        /// <see cref="PaddingCharPosition"/> or <see cref="Value"/> is being changed.
+        /// </summary>
+        protected virtual void SetPaddedString()
         {
-            string s = (typeof(T) == typeof(DateTime))? ((DateTime)Convert.ChangeType(value, typeof(DateTime))).ToString(DateTimeFormatString) : value?.ToString();
+            paddedString = PadChar(value?.ToString());
+        }
+
+        /// <summary>
+        /// Pad the <see cref="paddingChar"/> into the string.
+        /// </summary>
+        /// <param name="s">The string that the <see cref="paddingChar"/> is going to be padded to.</param>
+        /// <returns>
+        /// A string with <see cref="paddingChar"/> padded into it.
+        /// </returns>
+        /// <remarks>
+        /// The <see cref="paddingChar"/> can be padded to the left or the right of the string, subjected to the value
+        /// of <see cref="paddingCharPosition"/>.
+        /// </remarks>
+        protected string PadChar(string s)
+        {
             switch (paddingCharPosition)
             {
                 case PaddingCharPosition.Left:
-                    paddedString = s?.PadLeft(length, paddingChar);
-                    break;
+                    return s?.PadLeft(length, paddingChar);
                 case PaddingCharPosition.Right:
-                    paddedString = s?.PadRight(length, paddingChar);
-                    break;
+                    return s?.PadRight(length, paddingChar);
+                default:
+                    return null;
             }
         }
 
@@ -153,44 +188,31 @@ namespace Helper.Text
         {
             if (!String.IsNullOrEmpty(trimmedString))
             {
-                if (typeof(T) == typeof(DateTime))
-                {
-                    DateTime dateTimeFromString = DateTime.ParseExact(trimmedString, DateTimeFormatString, CultureInfo.InvariantCulture);
-                    value = (T)Convert.ChangeType(dateTimeFromString, typeof(T));
-                }
-                else
-                    value = (T)Convert.ChangeType(trimmedString, typeof(T));
+                value = ConvertStringToValue(trimmedString);
             }
         }
 
         /// <summary>
-        /// The format string that will be used to parse the datetime string into field value, or vice versa. It will
-        /// be ignored if the field is not a DateTime field.
+        /// Convert a string to an object of type <see cref="T"/>/>.
         /// </summary>
-        public string DateTimeFormatString { get; set; } = DefaultDateTimeFormatString;
+        /// <param name="s">String to be converted.</param>
+        /// <returns>An object of type <see cref="T"/>.</returns>
+        protected virtual T ConvertStringToValue(string s)
+        {
+            return (T)Convert.ChangeType(s, typeof(T));
+        }
 
         /// <summary>
-        /// Constructor of a fixed-length-field object.
+        /// Initialize a new instance of <see cref="FixedLengthField{T}"/> class to a field with a given field name and field length.
         /// </summary>
         /// <param name="name">Field name.</param>
         /// <param name="length">
         /// Length of field value, including all leading or trailing padding character.
-        /// If the type of the FixedLengthField is DateTime, value of length argument is irrelevant. In this case, value of <see cref="DateTimeFormatString"/> will be assigned to <see cref="Length"/> instead. 
         /// </param>
-        public FixedLengthField(string name, int length = UndefinedFieldLength)
+        public FixedLengthField(string name, int length)
         {
-            if (typeof(T) == typeof(DateTime))
-            {
-                if (length != UndefinedFieldLength)
-                    throw new ArgumentException("Length should not be defined for any DateTime FieldLengthField object.");
-                this.Name = name;
-                this.length = DateTimeFormatString.Length;
-            }
-            else
-            { 
-                this.Name = name;
-                this.length = length;
-            }
+            this.Name = name;
+            this.length = length;
         }
     }
 }

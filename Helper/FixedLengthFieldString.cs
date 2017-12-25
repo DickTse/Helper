@@ -7,7 +7,7 @@ namespace Helper.Text
     /// A class for splitting a given raw string into <see cref="IFixedLengthField"/> fields based on a set of field 
     /// defintion, or assembling a set of <see cref="IFixedLengthField"/> fields to build a string.
     /// </summary>
-    public class FixedLengthFieldString
+    public sealed class FixedLengthFieldString
     {
         private string rawString = null;
         

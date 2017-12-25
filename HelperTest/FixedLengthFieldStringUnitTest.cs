@@ -14,8 +14,8 @@ namespace HelperTest
         public void FixedLengthFieldString_RawStringTooShortShouldThrowMalformedRawStringException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<string>("HKID", 10),
-                new FixedLengthField<string>("Name", 20)
+                new FixedLengthStringField("HKID", 10),
+                new FixedLengthStringField("Name", 20)
             };
             string rawStr = "A123456CHAN TAI MAN";
             try
@@ -34,8 +34,8 @@ namespace HelperTest
         public void FixedLengthFieldString_RawStringTooLongShouldThrowMalformedRawStringException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<string>("HKID", 10),
-                new FixedLengthField<string>("Name", 10),
+                new FixedLengthStringField("HKID", 10),
+                new FixedLengthStringField("Name", 10),
             };
             string rawStr = "A123456(7)CHAN TAI MAN";
             try
@@ -55,7 +55,7 @@ namespace HelperTest
         public void FixedLengthFieldString_SingleStringIsParsedIntoFixedLengthFieldSuccessfully()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<string>("HKID", 10)
+                new FixedLengthStringField("HKID", 10)
             };
             string rawStr = "A123456(7)";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
@@ -68,7 +68,7 @@ namespace HelperTest
         public void FixedLengthFieldString_SingleIntegerIsParsedIntoFixedLengthFieldSuccessfully()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<int>("Age", 3)
+                new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "100";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
@@ -79,7 +79,7 @@ namespace HelperTest
         public void FixedLengthFieldString_IntegerWithTrailingSpaceShouldNotThrowException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<int>("Age", 3)
+                new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "9  ";
             try
@@ -96,7 +96,7 @@ namespace HelperTest
         public void FixedLengthFieldString_IntegerWithLeadingSpaceShouldNotThrowException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<int>("Age", 3)
+                new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "  9";
             try
@@ -113,7 +113,7 @@ namespace HelperTest
         public void FixedLengthFieldString_IntegerWithTrailingSpaceIsParsedIntoFixedLengthFieldSuccessfully()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<int>("Age", 3)
+                new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "9  ";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
@@ -124,7 +124,7 @@ namespace HelperTest
         public void FixedLengthFieldString_IntegerWithLeadingSpaceIsParsedIntoFixedLengthFieldSuccessfully()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<int>("Age", 3)
+                new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "  9";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
@@ -136,7 +136,7 @@ namespace HelperTest
         public void FixedLengthFieldString_IntegerWithNonNumericalCharacterShouldThrowException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthField<int>("Age", 3)
+                new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "99A";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
@@ -149,26 +149,11 @@ namespace HelperTest
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
             {
-                new FixedLengthField<DateTime>("DOB")
+                new FixedLengthDateTimeField("DOB")
             };
             string rawStr = "19851013";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
             Assert.AreEqual(new DateTime(1985, 10, 13), fixedStr.Fields["DOB"]);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void FixedLengthFieldString_ShouldThrowExceptionIfDateTimeLengthIsSpecified()
-        {
-            try
-            {
-                new FixedLengthField<DateTime>("DOB", 8);
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual("Length should not be defined for any DateTime FieldLengthField object.", ex.Message);
-                throw;
-            }
         }
 
         [TestMethod]
@@ -177,7 +162,7 @@ namespace HelperTest
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
             {
-                new FixedLengthField<DateTime>("DOB") {DateTimeFormatString = "abcdef"}
+                new FixedLengthDateTimeField("DOB") {Format = "abcdef"}
             };
             string rawStr = "19851013";
             new FixedLengthFieldString(rawStr, fields);
@@ -189,8 +174,8 @@ namespace HelperTest
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
             {
-                new FixedLengthField<string>("HKID", 10),
-                new FixedLengthField<string>("Name", 20)
+                new FixedLengthStringField("HKID", 10),
+                new FixedLengthStringField("Name", 20)
             };
             string rawStr = "A123456(7)CHAN TAI MAN        ";
             FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);

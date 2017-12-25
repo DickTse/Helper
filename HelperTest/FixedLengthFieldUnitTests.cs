@@ -14,7 +14,7 @@ namespace HelperTest
         public void FixedLengthField_DecimalFieldShouldReturnDecimalValue()
         {
             int i = 9;
-            var field = new FixedLengthField<decimal>("Height", 3);
+            var field = new FixedLengthDecimalField("Height", 3);
             field.Value = i;
             if (field.Value.GetType() != typeof(decimal))
                 Assert.Fail("Return value of decimal-type FixedLengthField is not decimal.");
@@ -23,7 +23,7 @@ namespace HelperTest
         [TestMethod]
         public void FixedLengthField_DecimalValueInStringShouldBeParsedIntoFixedLengthFieldSuccessfully()
         {
-            var field = new FixedLengthField<decimal>("Height", 3);
+            var field = new FixedLengthDecimalField("Height", 3);
             field.PaddedString = "9.1";
             Assert.AreEqual(9.1M, field.Value);
         }
@@ -32,7 +32,7 @@ namespace HelperTest
         public void FixedLengthField_IntegerFieldShouldReturnIntegerValue()
         {
             decimal d = 9.0M;
-            var field = new FixedLengthField<int>("Height", 3);
+            var field = new FixedLengthInt32Field("Height", 3);
             field.Value = (int)d;
             if (field.Value.GetType() != typeof(int))
                 Assert.Fail("Return value of integer-type FixedLengthField is not integer.");
@@ -43,7 +43,7 @@ namespace HelperTest
         {
             try
             {
-                var field = new FixedLengthField<int>("Age", 3);
+                var field = new FixedLengthInt32Field("Age", 3);
                 field.PaddedString = "-9 ";
             }
             catch (OverflowException)
@@ -55,14 +55,14 @@ namespace HelperTest
         [TestMethod]
         public void FixedLengthField_IntegerFieldPaddedStringWithDefaultPaddingPaddingCharPositionShouldPadTrailingSpace()
         {
-            var field = new FixedLengthField<int>("Age", 3);
+            var field = new FixedLengthInt32Field("Age", 3);
             field.Value = 9;
             Assert.AreEqual("9  ", field.PaddedString);
         }
 
         public void FixedLengthField_IntegerFieldPaddedStringWithPaddingPaddingCharPositionLeftShouldPadLeadingingSpace()
         {
-            var field = new FixedLengthField<int>("Age", 3)
+            var field = new FixedLengthInt32Field("Age", 3)
             {
                 PaddingCharPosition = PaddingCharPosition.Left
             };
@@ -72,7 +72,7 @@ namespace HelperTest
 
         public void FixedLengthField_IntegerFieldPaddedStringWithPaddingPaddingCharPositionRightShouldPadTrailingSpace()
         {
-            var field = new FixedLengthField<int>("Age", 3)
+            var field = new FixedLengthInt32Field("Age", 3)
             {
                 PaddingCharPosition = PaddingCharPosition.Right
             };
