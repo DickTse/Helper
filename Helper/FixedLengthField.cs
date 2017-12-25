@@ -14,10 +14,12 @@ namespace Helper.Text
         /// </summary>
         protected const char DefaultPaddingChar = ' ';
 
+        protected IFixedLengthFieldConverter<T> converter;
+
         /// <summary>
         /// Field name.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; protected set; }
 
         /// <summary>
         /// The backing field of <see cref="Length"/>.
@@ -40,7 +42,7 @@ namespace Helper.Text
             protected set
             {
                 length = value;
-                SetPaddedString();
+                UpdatePaddedString();
             } 
         }
 
@@ -61,8 +63,8 @@ namespace Helper.Text
             set
             {
                 paddingChar = value;
-                SetPaddedString();
-                SetValue();
+                UpdatePaddedString();
+                UpdateValue();
             } 
         }
 
@@ -83,8 +85,8 @@ namespace Helper.Text
             set
             {
                 paddingCharPosition = value;
-                SetPaddedString();
-                SetValue();
+                UpdatePaddedString();
+                UpdateValue();
             } 
         }
 
@@ -105,7 +107,7 @@ namespace Helper.Text
             set
             {
                 paddedString = value;
-                SetValue();
+                UpdateValue();
             } 
         }
 
@@ -128,7 +130,7 @@ namespace Helper.Text
             set
             {
                 this.value = value;
-                SetPaddedString();
+                UpdatePaddedString();
             }
         }
 
@@ -136,9 +138,10 @@ namespace Helper.Text
         /// Update the value of <see cref="paddedString"/> while the value of <see cref="Length"/>, <see cref="PaddingChar"/>,
         /// <see cref="PaddingCharPosition"/> or <see cref="Value"/> is being changed.
         /// </summary>
-        protected virtual void SetPaddedString()
+        protected virtual void UpdatePaddedString()
         {
-            paddedString = PadChar(value?.ToString());
+            string s = converter.ConvertFieldValueToString(value);
+            paddedString = PadChar(s);
         }
 
         /// <summary>
@@ -165,13 +168,16 @@ namespace Helper.Text
             }
         }
 
-        private void SetValue()
+        private void UpdateValue()
         {
-            string trimmedString = GetTrimmedString();
-            SetValueInDefinedType(trimmedString);
+            string trimmedString = GetTrimmedPaddedString();
+            if (!String.IsNullOrEmpty(trimmedString))
+            {
+                value = converter.ConvertStringToFieldValue(trimmedString);
+            }
         }
 
-        private string GetTrimmedString()
+        private string GetTrimmedPaddedString()
         {
             switch (paddingCharPosition)
             {
@@ -184,22 +190,15 @@ namespace Helper.Text
             }
         }
 
-        private void SetValueInDefinedType(string trimmedString)
-        {
-            if (!String.IsNullOrEmpty(trimmedString))
-            {
-                value = ConvertStringToValue(trimmedString);
-            }
-        }
-
         /// <summary>
-        /// Convert a string to an object of type <see cref="T"/>/>.
+        /// Initialize a new instance of <see cref="FixedLengthField{T}"/> class to a field with a given field name and field length.
         /// </summary>
-        /// <param name="s">String to be converted.</param>
-        /// <returns>An object of type <see cref="T"/>.</returns>
-        protected virtual T ConvertStringToValue(string s)
+        /// <param name="name">Field name.</param>
+        /// <param name="length">
+        /// Length of field value, including all leading or trailing padding character.
+        /// </param>
+        public FixedLengthField(string name, int length) : this(name, length, new NonFormattableFieldConverter<T>())
         {
-            return (T)Convert.ChangeType(s, typeof(T));
         }
 
         /// <summary>
@@ -209,10 +208,14 @@ namespace Helper.Text
         /// <param name="length">
         /// Length of field value, including all leading or trailing padding character.
         /// </param>
-        public FixedLengthField(string name, int length)
+        /// <param name="converter">
+        /// Converter for converting field value to padding string, and vice versa.
+        /// </param>
+        public FixedLengthField(string name, int length, IFixedLengthFieldConverter<T> converter)
         {
             this.Name = name;
             this.length = length;
+            this.converter = converter;
         }
     }
 }

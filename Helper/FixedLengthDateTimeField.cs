@@ -19,7 +19,7 @@ namespace Helper.Text
         /// As no particular format is given in this constructor, <see cref="FormattableFixedLengthField{T}.Format"/> 
         /// will be set to the value of <see cref="DefaultDateTimeFormat"/>.
         /// </remarks>
-        public FixedLengthDateTimeField(string name) : base(name, DefaultDateTimeFormat)
+        public FixedLengthDateTimeField(string name) : this(name, DefaultDateTimeFormat, DefaultDateTimeFormat.Length)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Helper.Text
         /// </summary>
         /// <param name="name">Field name.</param>
         /// <param name="format">Format for parsing the <see cref="DateTime"/> value into and out of string.</param>
-        public FixedLengthDateTimeField(string name, string format) : base(name, format)
+        public FixedLengthDateTimeField(string name, string format) : this(name, format, format.Length)
         {
         }
 
@@ -44,7 +44,7 @@ namespace Helper.Text
         /// As no particular format is given in this constructor, <see cref="FormattableFixedLengthField{T}.Format"/> 
         /// will be set to the value of <see cref="DefaultDateTimeFormat"/>.
         /// </remarks>
-        public FixedLengthDateTimeField(string name, int length) : base(name, DefaultDateTimeFormat, length)
+        public FixedLengthDateTimeField(string name, int length) : this(name, DefaultDateTimeFormat, length)
         {
         }
 
@@ -57,18 +57,8 @@ namespace Helper.Text
         /// <param name="length">
         /// Length of field value, including all leading or trailing padding character.
         /// </param>
-        public FixedLengthDateTimeField(string name, string format, int length) : base(name, format, length)
+        public FixedLengthDateTimeField(string name, string format, int length) : base(name, format, length, new DateTimeFieldConverter())
         {
-        }
-
-        protected override string GetFormattedStringFromValue()
-        {
-            return ((DateTime)Convert.ChangeType(value, typeof(DateTime))).ToString(Format);
-        }
-
-        protected override DateTime ConvertStringToValue(string trimmedString)
-        {
-            return DateTime.ParseExact(trimmedString, Format, CultureInfo.InvariantCulture);
         }
     }
 }

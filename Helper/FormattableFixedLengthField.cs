@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,24 @@ namespace Helper.Text
     public abstract class FormattableFixedLengthField<T> : FixedLengthField<T> where T : IConvertible, IFormattable
     {
         /// <summary>
+        /// Backing field of <see cref="Format"/>.
+        /// </summary>
+        private string format;
+
+        /// <summary>
         /// The format for parsing the value between <see cref="FixedLengthField{T}.PaddedString"/> and <see cref="FixedLengthField{T}.Value"/>.
         /// </summary>
-        public string Format { get; set; }
+        public string Format {
+            get => format;
+            set => SetFormat(value);
+        }
+
+        protected void SetFormat(string format)
+        {
+            this.format = format;
+            if (converter is IFormattableFixedLengthFieldConverter<T>)
+                ((IFormattableFixedLengthFieldConverter<T>)converter).Format = format;
+        }
 
         /// <summary>
         /// Field Length.
@@ -29,10 +45,10 @@ namespace Helper.Text
             }
             protected set 
             {
-                if (length < Format.Length)
-                    throw new ArgumentOutOfRangeException(nameof(Length), $"Value of {nameof(Length)} property cannot be smaller than the actual length of {nameof(Format)} property.");
+                //if (length < Format.Length)
+                //    throw new ArgumentOutOfRangeException(nameof(Length), $"Value of {nameof(Length)} property cannot be smaller than the actual length of {nameof(Format)} property.");
                 length = value;
-                SetPaddedString();
+                UpdatePaddedString();
             }
         }
 
@@ -42,9 +58,8 @@ namespace Helper.Text
         /// </summary>
         /// <param name="name">Field name.</param>
         /// <param name="format">Format for formatting strings.</param>
-        public FormattableFixedLengthField(string name, string format) : base(name, format.Length)
+        public FormattableFixedLengthField(string name, string format) : this(name, format, format.Length)
         {
-            Format = format;
         }
 
         /// <summary>
@@ -54,13 +69,8 @@ namespace Helper.Text
         /// <param name="length">
         /// Length of field value, including all leading or trailing padding character.
         /// </param>
-        public FormattableFixedLengthField(string name, int length) : base(name, length)
+        public FormattableFixedLengthField(string name, int length) : this(name, null, length)
         {
-            if (length < Format.Length)
-                throw new ArgumentOutOfRangeException(
-                    nameof(length), 
-                    $"Value of {nameof(length)} argument cannot be smaller than the actual length of {nameof(Format)} property."
-                );
         }
 
         /// <summary>
@@ -75,22 +85,35 @@ namespace Helper.Text
         /// <remarks>
         /// Value of <paramref name="length"/> must not be shorter than the length of <paramref name="format"/>.
         /// </remarks>
-        public FormattableFixedLengthField(string name, string format, int length) : base(name, length)
+        public FormattableFixedLengthField(string name, string format, int length): base(name, length, new FormattableFixedLengthFieldConverter<T>())
         {
-            if (length < format.Length)
-                throw new ArgumentOutOfRangeException(
-                    nameof(length), 
-                    $"Value of {nameof(length)} argument cannot be smaller than the actual length of {nameof(format)} arguement."
-                );
-            Format = format;
+            SetFormat(format);
         }
 
-        protected override void SetPaddedString()
+        /// <summary>
+        /// Initialize a <see cref="FormattableFixedLengthField{T}"/> class to a field with a given field name, a format 
+        /// for formatting the string being parsed in and out the field, and field length.
+        /// </summary>
+        /// <param name="name">Field name.</param>
+        /// <param name="format">Format for formatting strings.</param>
+        /// <param name="length">
+        /// Length of field value, including all leading or trailing padding character.
+        /// </param>
+        /// <param name="converter">
+        /// Converter for converting field value to padding string, and vice versa.
+        /// </param>
+        /// <remarks>
+        /// Value of <paramref name="length"/> must not be shorter than the length of <paramref name="format"/>.
+        /// </remarks>
+        public FormattableFixedLengthField(string name, string format, int length, IFormattableFixedLengthFieldConverter<T> converter) : base(name, length, converter)
         {
-            string formattedString = GetFormattedStringFromValue();
+            SetFormat(format);
+        }
+
+        protected override void UpdatePaddedString()
+        {
+            string formattedString = converter.ConvertFieldValueToString(value);
             paddedString = PadChar(formattedString);
         }
-
-        protected abstract string GetFormattedStringFromValue();
     }
 }
