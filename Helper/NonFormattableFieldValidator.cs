@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace Helper.Text
 {
@@ -7,7 +6,8 @@ namespace Helper.Text
     {
         public void ValidateRawString(string s)
         {
-            TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(s);
+            if (!ConversionHelper.CanParse<T>(s))
+                throw new FormatException($"\"{s}\" cannot be parsed into {typeof(T).FullName}.");
         }
     }
 }

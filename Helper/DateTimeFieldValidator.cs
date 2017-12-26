@@ -7,7 +7,8 @@ namespace Helper.Text
     {
         public override void ValidateRawString(string s)
         {
-            DateTime.ParseExact(s, Format, CultureInfo.InvariantCulture);
+            if (!DateTime.TryParseExact(s, Format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime d))
+                throw new FormatException($"\"{s}\" cannot be parsed into {nameof(DateTime)}.");
         }
     }
 }
