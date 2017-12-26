@@ -61,7 +61,7 @@ namespace Helper.Text
         /// </param>
         /// <param name="format">Format for parsing the <see cref="DateTime"/> value into and out of string.</param>
         public FixedLengthDateTimeField(string name, string format, int length) 
-            : base(name, length, format, new DateTimeFieldConverter())
+            : base(name, length, format, new DateTimeFieldConverter(), new DateTimeFieldValidator())
         {
         }
     }

@@ -27,6 +27,8 @@ namespace Helper.Text
             this.format = format;
             if (converter is IFormattableFixedLengthFieldConverter<T>)
                 ((IFormattableFixedLengthFieldConverter<T>)converter).Format = format;
+            if (validator is IFormattableFixedLengthFieldValidator<T>)
+                ((IFormattableFixedLengthFieldValidator<T>)validator).Format = format;
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace Helper.Text
         /// Value of <paramref name="length"/> must not be shorter than the length of <paramref name="format"/>.
         /// </remarks>
         public FormattableFixedLengthField(string name, int length, string format)
-            : this(name, length, format, new FormattableFixedLengthFieldConverter<T>())
+            : this(name, length, format, new FormattableFixedLengthFieldConverter<T>(), new FormattableFixedLengthFieldValidator<T>())
         {
         }
 
@@ -70,11 +72,15 @@ namespace Helper.Text
         /// <param name="converter">
         /// Converter for converting field value to padding string, and vice versa.
         /// </param>
+        /// <param name="validator">
+        /// Validator for validating field's correctness.
+        /// </param>
         /// <remarks>
         /// Value of <paramref name="length"/> must not be shorter than the length of <paramref name="format"/>.
         /// </remarks>
-        public FormattableFixedLengthField(string name, int length, string format, IFormattableFixedLengthFieldConverter<T> converter) 
-            : base(name, length, converter)
+        public FormattableFixedLengthField(
+            string name, int length, string format, IFormattableFixedLengthFieldConverter<T> converter, IFormattableFixedLengthFieldValidator<T> validator) 
+            : base(name, length, converter, validator)
         {
             SetFormat(format);
         }

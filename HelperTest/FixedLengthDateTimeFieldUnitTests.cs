@@ -11,10 +11,11 @@ namespace HelperTest
     public class FixedLengthDateTimeFieldUnitTests
     {
         [TestMethod]
-        public void FixedLengthDateTimeField_ParsingDateInStringWithLeadingSpaceShouldReturnTheSameDateTimeValue()
+        public void FixedLengthDateTimeField_ParsingDateInStringWithLeadingSpace_ShouldReturnTheSameDateTimeValue()
         {
             var field = new FixedLengthDateTimeField("DOB")
             {
+                Format = "yyyyMMdd",
                 RawString = "19851013"
             };
             Assert.AreEqual(new DateTime(1985, 10, 13), field.Value);

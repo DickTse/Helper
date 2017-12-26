@@ -16,6 +16,8 @@ namespace Helper.Text
 
         protected IFixedLengthFieldConverter<T> converter;
 
+        protected IFixedLengthFieldValidator<T> validator;
+
         private bool isValueEverSet = false;
 
         /// <summary>
@@ -104,9 +106,16 @@ namespace Helper.Text
             }
             set
             {
+                ValidateRawString(value);
                 rawString = value;
             } 
         }
+
+        private void ValidateRawString(string s)
+        {
+            validator.ValidateRawString(s);
+        }
+
 
         /// <summary>
         /// The backing field of <see cref="Value"/>.
@@ -200,7 +209,7 @@ namespace Helper.Text
         /// Length of field value, including all leading or trailing padding character.
         /// </param>
         public FixedLengthField(string name, int length) 
-            : this(name, length, new NonFormattableFieldConverter<T>())
+            : this(name, length, new NonFormattableFieldConverter<T>(), new NonFormattableFieldValidator<T>())
         {
         }
 
@@ -214,11 +223,15 @@ namespace Helper.Text
         /// <param name="converter">
         /// Converter for converting field value to padding string, and vice versa.
         /// </param>
-        public FixedLengthField(string name, int length, IFixedLengthFieldConverter<T> converter)
+        /// <param name="validator">
+        /// Validator for validating field's correctness.
+        /// </param>
+        public FixedLengthField(string name, int length, IFixedLengthFieldConverter<T> converter, IFixedLengthFieldValidator<T> validator)
         {
             this.Name = name;
             this.length = length;
             this.converter = converter;
+            this.validator = validator;
         }
     }
 }
