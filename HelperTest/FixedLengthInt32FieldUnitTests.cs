@@ -44,18 +44,16 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void FixedLengthInt32Field_FieldWithNegativeSignInPaddedStringShouldNotThrowException()
+        public void FixedLengthInt32Field_AssignNegativeIntegerInRawString_ShouldNotThrowException()
         {
+            var field = new FixedLengthInt32Field("Age", 3);
             try
             {
-                var field = new FixedLengthInt32Field("Age", 3)
-                {
-                    RawString = "-9 "
-                };
+                field.RawString = "-9 ";
             }
             catch (OverflowException)
             {
-                Assert.Fail("Assigning negative number into PaddedString property of integer-type FixedLengthField should not throw Overflow exception.");
+                Assert.Fail($"Assigning negative number into {nameof(FixedLengthInt32Field.RawString)} property of integer-type FixedLengthField should not throw Overflow exception.");
             }
         }
 
