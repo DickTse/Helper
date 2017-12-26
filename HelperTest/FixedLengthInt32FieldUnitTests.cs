@@ -11,7 +11,28 @@ namespace HelperTest
     public class FixedLengthInt32FieldUnitTests
     {
         [TestMethod]
-        public void FixedLengthInt32Field_ShouldReturnIntegerValue()
+        public void FixedLengthInt32Field_InitiateWithNameAndLength_ShouldNotThrowAnyException()
+        {
+            try
+            {
+                var field = new FixedLengthInt32Field("Height", 3);
+            }
+            catch
+            {
+                Assert.Fail("Exception is caught while initiating FixedLengthInt32Field with name and length argument.");
+            }
+        }
+
+        [TestMethod]
+        public void FixedLengthInt32Field_InitiateWithNameAndLength_ShouldResultInSameValuesInNameAndLengthProperties()
+        {
+            var field = new FixedLengthInt32Field("Height", 3);
+            Assert.AreEqual("Height", field.Name);
+            Assert.AreEqual(3, field.Length);
+        }
+
+        [TestMethod]
+        public void FixedLengthInt32Field_AssignValue_ShouldReturnIntegerValue()
         {
             decimal d = 9.0M;
             var field = new FixedLengthInt32Field("Height", 3)
@@ -29,7 +50,7 @@ namespace HelperTest
             {
                 var field = new FixedLengthInt32Field("Age", 3)
                 {
-                    PaddedString = "-9 "
+                    RawString = "-9 "
                 };
             }
             catch (OverflowException)
@@ -45,7 +66,7 @@ namespace HelperTest
             {
                 Value = 9
             };
-            Assert.AreEqual("9  ", field.PaddedString);
+            Assert.AreEqual("9  ", field.ToPaddedString());
         }
 
         [TestMethod]
@@ -56,7 +77,7 @@ namespace HelperTest
                 PaddingCharPosition = PaddingCharPosition.Left
             };
             field.Value = 9;
-            Assert.AreEqual("  9", field.PaddedString);
+            Assert.AreEqual("  9", field.ToPaddedString());
         }
 
         [TestMethod]
@@ -67,7 +88,7 @@ namespace HelperTest
                 PaddingCharPosition = PaddingCharPosition.Right
             };
             field.Value = 9;
-            Assert.AreEqual("9  ", field.PaddedString);
+            Assert.AreEqual("9  ", field.ToPaddedString());
         }
 
         [TestMethod]
@@ -76,7 +97,7 @@ namespace HelperTest
             var field = new FixedLengthInt32Field("Age", 3);
             try
             {
-                field.PaddedString = "9  ";
+                field.RawString = "9  ";
             }
             catch
             {
@@ -90,7 +111,7 @@ namespace HelperTest
             var field = new FixedLengthInt32Field("Age", 3);
             try
             {
-                field.PaddedString = "  9";
+                field.RawString = "  9";
             }
             catch
             {
@@ -103,7 +124,7 @@ namespace HelperTest
         {
             var field = new FixedLengthInt32Field("Age", 3)
             {
-                PaddedString = "9  "
+                RawString = "9  "
             };
             Assert.AreEqual(9, field.Value);
         }
@@ -113,7 +134,7 @@ namespace HelperTest
         {
             var field = new FixedLengthInt32Field("Age", 3)
             {
-                PaddedString = "  9"
+                RawString = "  9"
             };
             Assert.AreEqual(9, field.Value);
         }
@@ -124,7 +145,7 @@ namespace HelperTest
         {
             var field = new FixedLengthInt32Field("Age", 3)
             {
-                PaddedString = "99A"
+                RawString = "99A"
             };
         }
     }

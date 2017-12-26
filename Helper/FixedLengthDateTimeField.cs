@@ -19,7 +19,8 @@ namespace Helper.Text
         /// As no particular format is given in this constructor, <see cref="FormattableFixedLengthField{T}.Format"/> 
         /// will be set to the value of <see cref="DefaultDateTimeFormat"/>.
         /// </remarks>
-        public FixedLengthDateTimeField(string name) : this(name, DefaultDateTimeFormat, DefaultDateTimeFormat.Length)
+        public FixedLengthDateTimeField(string name) 
+            : this(name, DefaultDateTimeFormat, DefaultDateTimeFormat.Length)
         {
         }
 
@@ -29,7 +30,8 @@ namespace Helper.Text
         /// </summary>
         /// <param name="name">Field name.</param>
         /// <param name="format">Format for parsing the <see cref="DateTime"/> value into and out of string.</param>
-        public FixedLengthDateTimeField(string name, string format) : this(name, format, format.Length)
+        public FixedLengthDateTimeField(string name, string format) 
+            : this(name, format, format.Length)
         {
         }
 
@@ -44,7 +46,8 @@ namespace Helper.Text
         /// As no particular format is given in this constructor, <see cref="FormattableFixedLengthField{T}.Format"/> 
         /// will be set to the value of <see cref="DefaultDateTimeFormat"/>.
         /// </remarks>
-        public FixedLengthDateTimeField(string name, int length) : this(name, DefaultDateTimeFormat, length)
+        public FixedLengthDateTimeField(string name, int length) 
+            : this(name, DefaultDateTimeFormat, length)
         {
         }
 
@@ -53,11 +56,12 @@ namespace Helper.Text
         /// for formatting the string being parsed in and out the field, and field length.
         /// </summary>
         /// <param name="name">Field name.</param>
-        /// <param name="format">Format for parsing the <see cref="DateTime"/> value into and out of string.</param>
         /// <param name="length">
         /// Length of field value, including all leading or trailing padding character.
         /// </param>
-        public FixedLengthDateTimeField(string name, string format, int length) : base(name, format, length, new DateTimeFieldConverter())
+        /// <param name="format">Format for parsing the <see cref="DateTime"/> value into and out of string.</param>
+        public FixedLengthDateTimeField(string name, string format, int length) 
+            : base(name, length, format, new DateTimeFieldConverter())
         {
         }
     }

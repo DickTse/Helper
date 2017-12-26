@@ -5,14 +5,14 @@ namespace Helper.Text
 {
     internal class DateTimeFieldConverter : FormattableFixedLengthFieldConverter<DateTime>
     {
-        public override DateTime ConvertStringToFieldValue(string format, string s)
+        public override DateTime Parse(string s, string format)
         {
             return DateTime.ParseExact(s, format, CultureInfo.InvariantCulture);
         }
 
-        public override DateTime ConvertStringToFieldValue(string s)
+        public override DateTime Parse(string s)
         {
-            return ConvertStringToFieldValue(Format, s);
+            return Parse(s, Format);
         }
     }
 }

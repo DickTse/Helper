@@ -4,12 +4,12 @@ namespace Helper.Text
 {
     internal class NonFormattableFieldConverter<T> : IFixedLengthFieldConverter<T>
     {
-        public string ConvertFieldValueToString(T value)
+        public string ToString(T value)
         {
             return value?.ToString();
         }
 
-        public T ConvertStringToFieldValue(string s)
+        public T Parse(string s)
         {
             return (T)Convert.ChangeType(s, typeof(T));
         }

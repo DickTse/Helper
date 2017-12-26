@@ -15,7 +15,7 @@ namespace HelperTest
         {
             var field = new FixedLengthDateTimeField("DOB")
             {
-                PaddedString = "19851013"
+                RawString = "19851013"
             };
             Assert.AreEqual(new DateTime(1985, 10, 13), field.Value);
         }
@@ -26,7 +26,7 @@ namespace HelperTest
             DateTime dt = new DateTime(1985, 10, 13, 23, 59, 59, 999);
             var field = new FixedLengthDateTimeField("StartTime", "yyyyMMddHHmmssfff")
             {
-                PaddedString = dt.ToString("yyyyMMddHHmmssfff")
+                RawString = dt.ToString("yyyyMMddHHmmssfff")
             };
             Assert.AreEqual(dt, field.Value);
         }
@@ -37,18 +37,30 @@ namespace HelperTest
         {
             var field = new FixedLengthDateTimeField("DOB", "abcdef")
             {
-                PaddedString = "19851013"
+                RawString = "19851013"
             };
         }
 
         [TestMethod]
         public void FixedLengthDateTimeField_FieldWithValidDateValue_PaddedStringShouldPaddedWithTrailingSpace()
         {
-            var field = new FixedLengthDateTimeField("DOB", "yyyyMMdd", 0)
+            var field = new FixedLengthDateTimeField("DOB", "yyyyMMdd", 10)
             {
                 Value = new DateTime(1985, 10, 13)
             };
-            Assert.AreEqual("19851013", field.PaddedString);
+            Assert.AreEqual("19851013  ", field.ToPaddedString());
+        }
+
+        [TestMethod]
+        public void FixedLengthDateTimeField_DateValueLeftPaddedWithZeros_PaddedStringShouldPaddedWithLeadingZeros()
+        {
+            var field = new FixedLengthDateTimeField("DOB", "yyyyMMdd", 10)
+            {
+                Value = new DateTime(1985, 10, 13),
+                PaddingChar = '0',
+                PaddingCharPosition = PaddingCharPosition.Left
+            };
+            Assert.AreEqual("0019851013", field.ToPaddedString());
         }
     }
 }

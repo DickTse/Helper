@@ -7,22 +7,22 @@ namespace Helper.Text
     {
         public string Format { get; set; }
 
-        public virtual string ConvertFieldValueToString(string format, T value)
+        public virtual string ToString(T value, string format)
         {
             return ((T)Convert.ChangeType(value, typeof(T))).ToString(format, CultureInfo.InvariantCulture);
         }
 
-        public virtual string ConvertFieldValueToString(T value)
+        public virtual string ToString(T value)
         {
-            return ConvertFieldValueToString(Format, value);
+            return ToString(value, Format);
         }
 
-        public virtual T ConvertStringToFieldValue(string format, string s)
+        public virtual T Parse(string s, string format)
         {
             throw new System.NotImplementedException();
         }
 
-        public virtual T ConvertStringToFieldValue(string s)
+        public virtual T Parse(string s)
         {
             throw new System.NotImplementedException();
         }

@@ -53,7 +53,7 @@ namespace Helper.Text
             string s = rawString;
             foreach (var field in Fields)
             {
-                field.PaddedString = s.Substring(0, field.Length);
+                field.RawString = s.Substring(0, field.Length);
                 s = s.Substring(field.Length);
             }
         }
@@ -77,7 +77,7 @@ namespace Helper.Text
         /// </returns>
         public override string ToString()
         {
-            return rawString?? string.Join("", Fields.Select(f => f.PaddedString).ToArray());
+            return rawString?? string.Join("", Fields.Select(f => f.ToPaddedString()).ToArray());
         }
     }
 }

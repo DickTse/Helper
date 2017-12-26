@@ -24,7 +24,7 @@ namespace HelperTest
         public void FixedLengthDecimalField_ValueInStringShouldBeParsedIntoFixedLengthFieldSuccessfully()
         {
             var field = new FixedLengthDecimalField("Height", 3);
-            field.PaddedString = "9.1";
+            field.RawString = "9.1";
             Assert.AreEqual(9.1M, field.Value);
         }
     }

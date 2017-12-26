@@ -16,6 +16,8 @@ namespace Helper.Text
 
         protected IFixedLengthFieldConverter<T> converter;
 
+        private bool isValueEverSet = false;
+
         /// <summary>
         /// Field name.
         /// </summary>
@@ -39,10 +41,9 @@ namespace Helper.Text
             {
                 return length;
             }
-            protected set
+            private set
             {
                 length = value;
-                UpdatePaddedString();
             } 
         }
 
@@ -63,9 +64,7 @@ namespace Helper.Text
             set
             {
                 paddingChar = value;
-                UpdatePaddedString();
-                UpdateValue();
-            } 
+            }
         }
 
         /// <summary>
@@ -85,29 +84,27 @@ namespace Helper.Text
             set
             {
                 paddingCharPosition = value;
-                UpdatePaddedString();
-                UpdateValue();
-            } 
+            }
         }
 
         /// <summary>
-        /// The backing field of <see cref="PaddedString"/>.
+        /// The backing field of <see cref="RawString"/>.
         /// </summary>
-        protected string paddedString = String.Empty;
+        protected string rawString = String.Empty;
 
         /// <summary>
-        /// The raw string the includes the actual value of the field, together leading or trailing padding character(s).
+        /// The raw string includes the actual value of the field, together leading or trailing padding character(s).
+        /// Setting <see cref="RawString"/> also overwrites the value of <see cref="Value"/>.
         /// </summary>
-        public string PaddedString 
+        public string RawString 
         { 
             get
             {
-                return paddedString;
+                return rawString;
             }
             set
             {
-                paddedString = value;
-                UpdateValue();
+                rawString = value;
             } 
         }
 
@@ -117,31 +114,58 @@ namespace Helper.Text
         protected T value;
 
         /// <summary>
-        /// The actual value of the field. The type of value is determined at runtime. It is identical to the generic type 
-        /// given while the fixed-length-field object is declared.
+        /// The actual value of the field. The type of value is determined at runtime, which is identical to the type
+        /// specified in the type-parameter.
         /// </summary>
         public dynamic Value
         {
             get
             {
+                if (!isValueEverSet)
+                    value = GetValueFromRawString(rawString);
                 dynamic dynamicObject = this;
                 return dynamicObject.value;
             }
             set
             {
                 this.value = value;
-                UpdatePaddedString();
+                isValueEverSet = true;
+            }
+        }
+
+        private T GetValueFromRawString(string rawString)
+        {
+            string trimmedString = TrimPaddingChar(rawString);
+            if (!String.IsNullOrEmpty(trimmedString))
+                return converter.Parse(trimmedString);
+            else
+                return default(T);
+        }
+
+        private string TrimPaddingChar(string s)
+        {
+            switch (paddingCharPosition)
+            {
+                case PaddingCharPosition.Left:
+                    return s?.TrimStart(paddingChar);
+                case PaddingCharPosition.Right:
+                    return s?.TrimEnd(paddingChar);
+                default:
+                    return null;
             }
         }
 
         /// <summary>
-        /// Update the value of <see cref="paddedString"/> while the value of <see cref="Length"/>, <see cref="PaddingChar"/>,
-        /// <see cref="PaddingCharPosition"/> or <see cref="Value"/> is being changed.
+        /// Pad the field value with leading/trailing padding characters.
         /// </summary>
-        protected virtual void UpdatePaddedString()
+        /// <returns>A string in which the field value is padded with leading / trailing padding characters.</returns>
+        public virtual string ToPaddedString()
         {
-            string s = converter.ConvertFieldValueToString(value);
-            paddedString = PadChar(s);
+            string s = converter.ToString(value);
+            if (s.Length > length)
+                return s.Substring(0, length);
+            else
+                return PadPaddingChar(s);
         }
 
         /// <summary>
@@ -155,7 +179,7 @@ namespace Helper.Text
         /// The <see cref="paddingChar"/> can be padded to the left or the right of the string, subjected to the value
         /// of <see cref="paddingCharPosition"/>.
         /// </remarks>
-        protected string PadChar(string s)
+        protected string PadPaddingChar(string s)
         {
             switch (paddingCharPosition)
             {
@@ -168,28 +192,6 @@ namespace Helper.Text
             }
         }
 
-        private void UpdateValue()
-        {
-            string trimmedString = GetTrimmedPaddedString();
-            if (!String.IsNullOrEmpty(trimmedString))
-            {
-                value = converter.ConvertStringToFieldValue(trimmedString);
-            }
-        }
-
-        private string GetTrimmedPaddedString()
-        {
-            switch (paddingCharPosition)
-            {
-                case PaddingCharPosition.Left:
-                    return paddedString?.TrimStart(paddingChar);
-                case PaddingCharPosition.Right:
-                    return paddedString?.TrimEnd(paddingChar);
-                default:
-                    return null;
-            }
-        }
-
         /// <summary>
         /// Initialize a new instance of <see cref="FixedLengthField{T}"/> class to a field with a given field name and field length.
         /// </summary>
@@ -197,7 +199,8 @@ namespace Helper.Text
         /// <param name="length">
         /// Length of field value, including all leading or trailing padding character.
         /// </param>
-        public FixedLengthField(string name, int length) : this(name, length, new NonFormattableFieldConverter<T>())
+        public FixedLengthField(string name, int length) 
+            : this(name, length, new NonFormattableFieldConverter<T>())
         {
         }
 

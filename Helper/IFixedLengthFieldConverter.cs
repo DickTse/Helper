@@ -4,7 +4,7 @@ namespace Helper.Text
 {
     public interface IFixedLengthFieldConverter<T>
     {
-        string ConvertFieldValueToString(T value);
-        T ConvertStringToFieldValue(string s);
+        string ToString(T value);
+        T Parse(string s);
     }
 }
