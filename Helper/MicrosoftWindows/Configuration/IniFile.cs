@@ -1,3 +1,4 @@
+// TODO: Move all classes under Helper.MicrosoftWindows from Helper.dll to a new assembly, in order to make Helper.dll cross-platform.
 using Helper.Configuration;
 using System;
 using System.Collections.Generic;

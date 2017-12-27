@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Helper.Configuration;
+using Helper.Performance;
+using Helper.Text;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using Helper.Configuration;
-using Helper.Performance;
-using Helper.Text;
 
 namespace Helper.Demo
 {
@@ -111,7 +111,7 @@ namespace Helper.Demo
             Console.WriteLine("Reading all configurations from a section in INI file");
             Console.WriteLine("=====================================================");
 
-            IniFile ini = new IniFile(path);
+            IIniFile ini = new MicrosoftWindows.Configuration.IniFile(path); // TODO: Revise this statement once classes under Helper.MicrosoftWindows are moved to a new assembly.
             Console.WriteLine();
             Console.WriteLine("INI parameters and values");
             Console.WriteLine("-------------------------");
