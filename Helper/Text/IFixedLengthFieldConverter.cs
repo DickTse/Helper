@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Helper.Text
+﻿namespace Helper.Text
 {
     public interface IFixedLengthFieldConverter<T>
     {

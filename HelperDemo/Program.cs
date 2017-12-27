@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using Helper.Configuration;
-using Helper.Optimization;
+using Helper.Performance;
 using Helper.Text;
 
 namespace Helper.Demo
