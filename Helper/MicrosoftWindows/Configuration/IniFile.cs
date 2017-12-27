@@ -1,3 +1,4 @@
+using Helper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -5,9 +6,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Helper.Configuration
+namespace Helper.MicrosoftWindows.Configuration
 {
-    public class IniFile
+    public class IniFile : IIniFile
     {
         private const int SingleValueSize = 255;
         private const int SectionBufferSize = 2048;
@@ -41,7 +42,7 @@ namespace Helper.Configuration
             if (!File.Exists(path))
                 throw new FileNotFoundException("Ini file does not exist.", path);
                 
-            this.Path = path;
+            Path = path;
         }
 
         /// <summary>
