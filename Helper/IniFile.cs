@@ -37,6 +37,7 @@ namespace Helper.Configuration
         public IniFile(string path)
         {
             ParameterGuard.NullOrEmptyStringCheck(path, nameof(path), "Path of ini file must not be null or empty.");
+
             if (!File.Exists(path))
                 throw new FileNotFoundException("Ini file does not exist.", path);
                 
@@ -51,6 +52,9 @@ namespace Helper.Configuration
         /// <param name="value">Value to be set.</param>
         public void WriteValue<T>(string section, string key, T value) where T : IConvertible
         {
+            ParameterGuard.NullOrEmptyStringCheck(section, nameof(section));
+            ParameterGuard.NullOrEmptyStringCheck(key, nameof(key));
+
             WritePrivateProfileString(section, key, Convert.ToString(value), Path);
         }
 
@@ -63,6 +67,9 @@ namespace Helper.Configuration
         /// <returns>The value if the key exists; otherwise, the default value.</returns>
         public T ReadValue<T>(string section, string key, T defaultValue = default(T)) where T : IConvertible
         {
+            ParameterGuard.NullOrEmptyStringCheck(section, nameof(section));
+            ParameterGuard.NullOrEmptyStringCheck(key, nameof(key));
+
             StringBuilder value = new StringBuilder(SingleValueSize);
             GetPrivateProfileString(section, key, Convert.ToString(defaultValue), value, 255, Path);
             return (T)Convert.ChangeType(value, typeof(T));
@@ -75,6 +82,8 @@ namespace Helper.Configuration
         /// <returns>A set of parameter keys and values.</returns>
         public IDictionary<string, T> ReadAllKeysAndValues<T>(string section) where T : IConvertible
         {
+            ParameterGuard.NullOrEmptyStringCheck(section, nameof(section));
+
             byte[] buffer = new byte[SectionBufferSize];
             GetPrivateProfileSection(section, buffer, SectionBufferSize, Path);
             string[] parameters = Encoding.ASCII.GetString(buffer)
