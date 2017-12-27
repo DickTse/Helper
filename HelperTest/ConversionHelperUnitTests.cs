@@ -6,10 +6,10 @@ namespace HelperTest
 {
     [TestClass]
     [TestCategory("Unit Test")]
-    public class ConvertionHelperUnitTests
+    public class ConversionHelperUnitTests
     {
         [TestMethod]
-        public void ConvertionHelper_TryParse_ParseNormalIntegerStringIntoInteger_ShouldReturnTrueAndAnInteger()
+        public void ConversionHelper_TryParse_ParseNormalIntegerStringIntoInteger_ShouldReturnTrueAndAnInteger()
         {
             string s = "1";
             int expectedInt = Int32.Parse(s);
@@ -21,7 +21,7 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void ConvertionHelper_TryParse_ParseHugeNumberInStringIntoInteger_ShouldReturnFalseAndDefaultIntegerValue()
+        public void ConversionHelper_TryParse_ParseHugeNumberInStringIntoInteger_ShouldReturnFalseAndDefaultIntegerValue()
         {
             string s = "9999999999";
             Int64 expectedInt = Int64.Parse(s);
@@ -33,7 +33,7 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void ConvertionHelper_TryParse_ParseTinyNegativeNumberInStringIntoInteger_ShouldReturnFalseAndDefaultIntegerValue()
+        public void ConversionHelper_TryParse_ParseTinyNegativeNumberInStringIntoInteger_ShouldReturnFalseAndDefaultIntegerValue()
         {
             string s = "-9999999999";
             Int64 expectedInt = Int64.Parse(s);
@@ -45,7 +45,7 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void ConvertionHelper_CanParse_ParseNormalIntegerStringIntoInteger_ShouldReturnTrue()
+        public void ConversionHelper_CanParse_ParseNormalIntegerStringIntoInteger_ShouldReturnTrue()
         {
             string s = "1";
             if (!(ConversionHelper.CanParse<int>(s)))
@@ -53,7 +53,7 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void ConvertionHelper_CanParse_ParseHugeNumberInStringIntoInteger_ShouldReturnFalse()
+        public void ConversionHelper_CanParse_ParseHugeNumberInStringIntoInteger_ShouldReturnFalse()
         {
             string s = "9999999999";
             if (ConversionHelper.CanParse<int>(s))
@@ -61,7 +61,7 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void ConvertionHelper_CanParse_ParseTinyNegativeNumberInStringIntoInteger_ShouldReturnFalse()
+        public void ConversionHelper_CanParse_ParseTinyNegativeNumberInStringIntoInteger_ShouldReturnFalse()
         {
             string s = "-9999999999";
             if (ConversionHelper.CanParse<int>(s))
