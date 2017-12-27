@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 namespace Helper.Text
@@ -24,10 +23,8 @@ namespace Helper.Text
         /// <param name="fields">A set of defintions that defines the fields in the string.</param>
         public FixedLengthFieldString(string rawString, FixedLengthFieldCollection fields)
         {
-            if (rawString == null)
-                throw new ArgumentNullException(nameof(rawString), "Argument cannot be null.");
-            if (fields == null)
-                throw new ArgumentNullException(nameof(fields), "Argument cannot be null.");
+            ParameterGuard.NullCheck(rawString, nameof(rawString));
+            ParameterGuard.NullCheck(fields, nameof(fields));
 
             this.rawString = rawString;
             this.Fields = fields;

@@ -36,8 +36,7 @@ namespace Helper.Configuration
         /// <param name="path">Path of the INI file.</param>
         public IniFile(string path)
         {
-            if (path == null) 
-                throw new ArgumentNullException(nameof(path), "Path of ini file cannot be null.");
+            ParameterGuard.NullOrEmptyStringCheck(path, nameof(path), "Path of ini file must not be null or empty.");
             if (!File.Exists(path))
                 throw new FileNotFoundException("Ini file does not exist.", path);
                 
