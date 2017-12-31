@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Helper.Text
 {
-    internal class FormattableFixedLengthFieldConverter<T> : IFormattableFixedLengthFieldConverter<T> where T : IFormattable
+    internal class FormattableFixedLengthFieldConverter<T> : IFormattableFixedLengthFieldConverter<T> where T : IConvertible, IFormattable
     {
         public string Format { get; set; }
 

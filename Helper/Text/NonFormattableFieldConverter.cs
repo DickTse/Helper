@@ -2,7 +2,7 @@
 
 namespace Helper.Text
 {
-    internal class NonFormattableFieldConverter<T> : IFixedLengthFieldConverter<T>
+    internal class NonFormattableFieldConverter<T> : IFixedLengthFieldConverter<T> where T : IConvertible
     {
         public string ToString(T value)
         {
