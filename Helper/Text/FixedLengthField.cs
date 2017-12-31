@@ -8,25 +8,20 @@ namespace Helper.Text
     public abstract class FixedLengthField<T> : IFixedLengthField where T : IConvertible
     {
         /// <summary>
-        /// The default value of <see cref="paddingChar"/>.
+        /// The default value of <see cref="PaddingChar"/>.
         /// </summary>
         protected const char DefaultPaddingChar = ' ';
 
-        protected IFixedLengthFieldConverter<T> converter;
+        private IFixedLengthFieldConverter<T> converter;
 
-        protected IFixedLengthFieldValidator<T> validator;
+        private IFixedLengthFieldValidator<T> validator;
 
         private bool isValueEverSet = false;
 
         /// <summary>
         /// Field name.
         /// </summary>
-        public string Name { get; protected set; }
-
-        /// <summary>
-        /// The backing field of <see cref="Length"/>.
-        /// </summary>
-        protected int length;
+        public string Name { get; private set; }
 
         /// <summary>
         /// Field Length.
@@ -35,73 +30,30 @@ namespace Helper.Text
         /// The pre-defined field length. All the characters in the actual value, and leading characters / trailing 
         /// characters are counted.
         /// </value>
-        public virtual int Length 
-        { 
-            get
-            {
-                return length;
-            }
-            private set
-            {
-                length = value;
-            } 
-        }
-
-        /// <summary>
-        /// The backing field of <see cref="PaddingChar"/>
-        /// </summary>
-        protected char paddingChar = DefaultPaddingChar;
+        public int Length { get; private set; }
 
         /// <summary>
         /// The leading / trailing character that is padded to the field.
         /// </summary>
-        public char PaddingChar 
-        { 
-            get
-            {
-                return paddingChar;
-            }
-            set
-            {
-                paddingChar = value;
-            }
-        }
-
-        /// <summary>
-        /// The backing field of <see cref="PaddingCharPosition"/>.
-        /// </summary>
-        protected PaddingCharPosition paddingCharPosition = PaddingCharPosition.Right;
+        public char PaddingChar { get; set; } = DefaultPaddingChar;
 
         /// <summary>
         /// The position of the padding character to be padded to the field.
         /// </summary>
-        public PaddingCharPosition PaddingCharPosition 
-        { 
-            get
-            {
-                return paddingCharPosition;
-            }
-            set
-            {
-                paddingCharPosition = value;
-            }
-        }
+        public PaddingCharPosition PaddingCharPosition { get; set; } = Text.PaddingCharPosition.Right;
 
         /// <summary>
         /// The backing field of <see cref="RawString"/>.
         /// </summary>
-        protected string rawString = String.Empty;
+        private string rawString = String.Empty;
 
         /// <summary>
         /// The raw string includes the actual value of the field, together leading or trailing padding character(s).
         /// Setting <see cref="RawString"/> also overwrites the value of <see cref="Value"/>.
         /// </summary>
         public string RawString 
-        { 
-            get
-            {
-                return rawString;
-            }
+        {
+            get => rawString;
             set
             {
                 ValidateRawString(value);
@@ -114,11 +66,10 @@ namespace Helper.Text
             validator.ValidateRawString(s);
         }
 
-
         /// <summary>
-        /// The backing field of <see cref="Value"/>.
+        /// The backing field of <see cref="Value"/>, which belongs to type <see cref="typeof(T)"/> instead of <see cref="nameof(dynamic)"/>.
         /// </summary>
-        protected T value;
+        protected T InternalValue { get; private set; }
 
         /// <summary>
         /// The actual value of the field. The type of value is determined at runtime, which is identical to the type
@@ -129,13 +80,13 @@ namespace Helper.Text
             get
             {
                 if (!isValueEverSet)
-                    value = GetValueFromRawString(rawString);
+                    InternalValue = GetValueFromRawString(rawString);
                 dynamic dynamicObject = this;
-                return dynamicObject.value;
+                return dynamicObject.InternalValue;
             }
             set
             {
-                this.value = value;
+                InternalValue = value;
                 isValueEverSet = true;
             }
         }
@@ -151,12 +102,12 @@ namespace Helper.Text
 
         private string TrimPaddingChar(string s)
         {
-            switch (paddingCharPosition)
+            switch (PaddingCharPosition)
             {
                 case PaddingCharPosition.Left:
-                    return s?.TrimStart(paddingChar);
+                    return s?.TrimStart(PaddingChar);
                 case PaddingCharPosition.Right:
-                    return s?.TrimEnd(paddingChar);
+                    return s?.TrimEnd(PaddingChar);
                 default:
                     return null;
             }
@@ -168,32 +119,32 @@ namespace Helper.Text
         /// <returns>A string in which the field value is padded with leading / trailing padding characters.</returns>
         public virtual string ToPaddedString()
         {
-            string s = converter.ToString(value);
-            if (s.Length > length)
-                return s.Substring(0, length);
+            string s = converter.ToString(InternalValue);
+            if (s.Length > Length)
+                return s.Substring(0, Length);
             else
                 return PadPaddingChar(s);
         }
 
         /// <summary>
-        /// Pad the <see cref="paddingChar"/> into the string.
+        /// Pad the <see cref="PaddingChar"/> into the string.
         /// </summary>
-        /// <param name="s">The string that the <see cref="paddingChar"/> is going to be padded to.</param>
+        /// <param name="s">The string that the <see cref="PaddingChar"/> is going to be padded to.</param>
         /// <returns>
-        /// A string with <see cref="paddingChar"/> padded into it.
+        /// A string with <see cref="PaddingChar"/> padded into it.
         /// </returns>
         /// <remarks>
-        /// The <see cref="paddingChar"/> can be padded to the left or the right of the string, subjected to the value
-        /// of <see cref="paddingCharPosition"/>.
+        /// The <see cref="PaddingChar"/> can be padded to the left or the right of the string, subjected to the value
+        /// of <see cref="PaddingCharPosition"/>.
         /// </remarks>
         protected string PadPaddingChar(string s)
         {
-            switch (paddingCharPosition)
+            switch (PaddingCharPosition)
             {
                 case PaddingCharPosition.Left:
-                    return s?.PadLeft(length, paddingChar);
+                    return s?.PadLeft(Length, PaddingChar);
                 case PaddingCharPosition.Right:
-                    return s?.PadRight(length, paddingChar);
+                    return s?.PadRight(Length, PaddingChar);
                 default:
                     return null;
             }
@@ -226,8 +177,8 @@ namespace Helper.Text
         /// </param>
         public FixedLengthField(string name, int length, IFixedLengthFieldConverter<T> converter, IFixedLengthFieldValidator<T> validator)
         {
-            this.Name = name;
-            this.length = length;
+            Name = name;
+            Length = length;
             this.converter = converter;
             this.validator = validator;
         }

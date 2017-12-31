@@ -4,6 +4,9 @@ namespace Helper.Text
 {
     public abstract class FormattableFixedLengthField<T> : FixedLengthField<T> where T : IConvertible, IFormattable
     {
+        private IFormattableFixedLengthFieldConverter<T> converter;
+        private IFormattableFixedLengthFieldValidator<T> validator;
+
         /// <summary>
         /// Backing field of <see cref="Format"/>.
         /// </summary>
@@ -20,10 +23,8 @@ namespace Helper.Text
         protected void SetFormat(string format)
         {
             this.format = format;
-            if (converter is IFormattableFixedLengthFieldConverter<T>)
-                ((IFormattableFixedLengthFieldConverter<T>)converter).Format = format;
-            if (validator is IFormattableFixedLengthFieldValidator<T>)
-                ((IFormattableFixedLengthFieldValidator<T>)validator).Format = format;
+            converter.Format = format;
+            validator.Format = format;
         }
         /// <summary>
         /// Initialize a <see cref="FormattableFixedLengthField{T}"/> class to a field with a given field name, a format 
@@ -47,12 +48,14 @@ namespace Helper.Text
             string name, int length, string format, IFormattableFixedLengthFieldConverter<T> converter, IFormattableFixedLengthFieldValidator<T> validator) 
             : base(name, length, converter, validator)
         {
+            this.converter = converter;
+            this.validator = validator;
             SetFormat(format);
         }
 
         public override string ToPaddedString()
         {
-            string formattedString = converter.ToString(value);
+            string formattedString = converter.ToString(InternalValue);
             return PadPaddingChar(formattedString);
         }
     }
