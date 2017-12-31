@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Helper
 {
@@ -7,6 +8,7 @@ namespace Helper
     /// </summary>
     public static class ConsoleHelper
     {
+        [ExcludeFromCodeCoverage]
         public static void Pause()
         {
             Console.WriteLine("Press any key to continue...");
