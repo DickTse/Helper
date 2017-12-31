@@ -55,10 +55,9 @@ Included items must then not match any entries in the exclude list to remain inc
               </Exclude>
             </Functions>
             -->
-            
+
             <!-- Match attributes on any code element: -->
             <!-- Don't forget "Attribute" at the end of the name -->
-            <!--
             <Attributes>
               <Exclude>
                 <Attribute>^System\.Diagnostics\.DebuggerHiddenAttribute$</Attribute>
@@ -68,7 +67,6 @@ Included items must then not match any entries in the exclude list to remain inc
                 <Attribute>^System\.Diagnostics\.CodeAnalysis.ExcludeFromCodeCoverageAttribute$</Attribute>
               </Exclude>
             </Attributes>
-            -->
 
             <!-- Match the path of the source files in which each method is defined: -->
             <!--
