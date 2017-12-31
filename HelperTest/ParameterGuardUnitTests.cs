@@ -10,14 +10,39 @@ namespace HelperTest
     public class ParameterGuardUnitTests
     {
         private const string ParameterName = "foo";
-        private const string Message = "bar";
+        private const string CustomExceptionMessage = "bar";
         private const string NonEmptyString = "foo";
+
+        #region Methods called by unit tests
+        private string GetExpectedExceptionMessage<TException>(TException ex, string customExceptionMessage) where TException : ArgumentException
+        {
+            return customExceptionMessage + "\r\nParameter name: " + ex.ParamName;
+        }
+
+        private void ValidateExceptionParameterName<TException>(TException ex, string expectedParamName) where TException : ArgumentException
+        {
+            Assert.AreEqual(expectedParamName, ex.ParamName, new StringBuilder(300)
+                .Append($"{typeof(TException)}, which is expected, is thrown. However, the value of ")
+                .Append($"{nameof(ex.ParamName)} property is incorrect.\r\nExpected ")
+                .Append($"{nameof(ex.ParamName)}:<{expectedParamName}>. Actual:<{ex.ParamName}>.")
+                .ToString());
+        }
+
+        private void ValidateExceptionMessage<TException>(TException ex, string expectedMessage) where TException : ArgumentException
+        {
+            Assert.AreEqual(expectedMessage, ex.Message, new StringBuilder(300)
+                .Append($"{typeof(TException)}, which is expected, is thrown. However, the value of ")
+                .Append($"{nameof(ex.Message)} property is incorrect.\r\nExpected ")
+                .Append($"{nameof(ex.Message)}:<{expectedMessage}>. Actual:<{ex.Message}>.")
+                .ToString());
+        }
+        #endregion
 
         [TestMethod]
         public void ParameterGuard_NullCheck_CheckNonNullValueWithGivenMessage_ShouldNotThrowException()
         {
             object nonNullObject = new object();
-            ParameterGuard.NullCheck(nonNullObject, ParameterName, Message);
+            ParameterGuard.NullCheck(nonNullObject, ParameterName, CustomExceptionMessage);
         }
 
         [TestMethod]
@@ -33,33 +58,16 @@ namespace HelperTest
         {
             try
             {
-                ParameterGuard.NullCheck<object>(null, ParameterName, Message);
+                ParameterGuard.NullCheck<object>(null, ParameterName, CustomExceptionMessage);
             }
-            catch (ArgumentNullException ex) when (ex.ParamName == ParameterName && ex.Message == $"{Message}\r\nParameter name: {ParameterName}")
+            catch (ArgumentNullException ex)
             {
-                // ParamName and Message are both expected. Just rethrow the ArgumentNullException and leave it to
-                // ExpectedException attribute.
+                ValidateExceptionParameterName(ex, ParameterName);
+                ValidateExceptionMessage(ex, GetExpectedExceptionMessage(ex, CustomExceptionMessage));
+
+                // If values of both ex.Message are ex.ParamName are expected, rethrow the ArgumentNullException to
+                // make the test pass.
                 throw;
-            }
-            catch (ArgumentNullException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentNullException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentNullException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
-            }
-            catch (ArgumentNullException ex) when (ex.Message != $"{Message}\r\nParameter name: {ParameterName}")
-            {
-                // ArgumentNullException is caught, but the Message is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentNullException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentNullException.Message)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentNullException.Message)}:<{Message}>. Actual:<{ex.Message}>.")
-                    .ToString());
             }
         }
 
@@ -71,21 +79,13 @@ namespace HelperTest
             {
                 ParameterGuard.NullCheck<object>(null, ParameterName);
             }
-            catch (ArgumentNullException ex) when (ex.ParamName == ParameterName)
+            catch (ArgumentNullException ex)
             {
-                // ParamName is expected. Just rethrow the ArgumentNullException and leave it to ExpectedException 
-                // attribute.
+                ValidateExceptionParameterName(ex, ParameterName);
+
+                // If value of ex.ParamName is expected, rethrow the ArgumentNullException to
+                // make the test pass.
                 throw;
-            }
-            catch (ArgumentNullException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentNullException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentNullException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
             }
         }
 
@@ -93,7 +93,7 @@ namespace HelperTest
         public void ParameterGuard_DefaultValueCheck_CheckNonDefaultValueWithGivenMessage_ShouldNotThrowException()
         {
             int i = 100;
-            ParameterGuard.DefaultValueCheck(i, ParameterName, Message);
+            ParameterGuard.DefaultValueCheck(i, ParameterName, CustomExceptionMessage);
         }
 
         [TestMethod]
@@ -109,33 +109,16 @@ namespace HelperTest
         {
             try
             {
-                ParameterGuard.DefaultValueCheck<int>(default(int), ParameterName, Message);
+                ParameterGuard.DefaultValueCheck(default(int), ParameterName, CustomExceptionMessage);
             }
-            catch (ArgumentException ex) when (ex.ParamName == ParameterName && ex.Message == $"{Message}\r\nParameter name: {ParameterName}")
+            catch (ArgumentException ex)
             {
-                // ParamName and Message are both expected. Just rethrow the ArgumentNullException and leave it to
-                // ExpectedException attribute.
+                ValidateExceptionParameterName(ex, ParameterName);
+                ValidateExceptionMessage(ex, GetExpectedExceptionMessage(ex, CustomExceptionMessage));
+
+                // If values of both ex.Message are ex.ParamName are expected, rethrow the ArgumentException to
+                // make the test pass.
                 throw;
-            }
-            catch (ArgumentException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
-            }
-            catch (ArgumentException ex) when (ex.Message != $"{Message}\r\nParameter name: {ParameterName}")
-            {
-                // ArgumentException is caught, but the Message is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.Message)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.Message)}:<{Message}>. Actual:<{ex.Message}>.")
-                    .ToString());
             }
         }
 
@@ -145,30 +128,22 @@ namespace HelperTest
         {
             try
             {
-                ParameterGuard.DefaultValueCheck<int>(default(int), ParameterName);
+                ParameterGuard.DefaultValueCheck(default(int), ParameterName);
             }
-            catch (ArgumentException ex) when (ex.ParamName == ParameterName)
+            catch (ArgumentException ex)
             {
-                // ParamName is expected. Just rethrow the ArgumentNullException and leave it to ExpectedException
-                // attribute.
+                ValidateExceptionParameterName(ex, ParameterName);
+
+                // If value of ex.ParamName is expected, rethrow the ArgumentException to
+                // make the test pass.
                 throw;
-            }
-            catch (ArgumentException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
             }
         }
 
         [TestMethod]
         public void ParameterGuard_EmptyStringCheck_CheckNonEmptyAndNonNullValueWithGivenMessage_ShouldNotThrowException()
         {
-            ParameterGuard.EmptyStringCheck(NonEmptyString, ParameterName, Message);
+            ParameterGuard.EmptyStringCheck(NonEmptyString, ParameterName, CustomExceptionMessage);
         }
 
         [TestMethod]
@@ -180,7 +155,7 @@ namespace HelperTest
         [TestMethod]
         public void ParameterGuard_EmptyStringCheck_CheckNullValueWithGivenMessage_ShouldNotThrowException()
         {
-            ParameterGuard.EmptyStringCheck(null, ParameterName, Message);
+            ParameterGuard.EmptyStringCheck(null, ParameterName, CustomExceptionMessage);
         }
 
         [TestMethod]
@@ -195,34 +170,15 @@ namespace HelperTest
         {
             try
             {
-                ParameterGuard.EmptyStringCheck(String.Empty, ParameterName, Message);
+                ParameterGuard.EmptyStringCheck(String.Empty, ParameterName, CustomExceptionMessage);
             }
-            catch (ArgumentException ex) when (ex.ParamName == ParameterName && ex.Message == $"{Message}\r\nParameter name: {ParameterName}")
+            catch (ArgumentException ex)
             {
-                // ParamName and Message are both expected. Just rethrow the ArgumentNullException and leave it to  
-                // ExpectedException attribute.
-                throw;
-            }
-            catch (ArgumentException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
-                throw;
-            }
-            catch (ArgumentException ex) when (ex.Message != $"{Message}\r\nParameter name: {ParameterName}")
-            {
-                // ArgumentException is caught, but the Message is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.Message)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.Message)}:<{Message}>. Actual:<{ex.Message}>.")
-                    .ToString());
+                ValidateExceptionParameterName(ex, ParameterName);
+                ValidateExceptionMessage(ex, GetExpectedExceptionMessage(ex, CustomExceptionMessage));
+
+                // If values of both ex.Message are ex.ParamName are expected, rethrow the ArgumentException to
+                // make the test pass.
                 throw;
             }
         }
@@ -235,21 +191,12 @@ namespace HelperTest
             {
                 ParameterGuard.EmptyStringCheck(String.Empty, ParameterName);
             }
-            catch (ArgumentException ex) when (ex.ParamName == ParameterName && ex.Message == $"{Message}\r\nParameter name: {ParameterName}")
+            catch (ArgumentException ex)
             {
-                // ParamName and Message are both expected. Just rethrow the ArgumentNullException and leave it to
-                // ExpectedException attribute.
-                throw;
-            }
-            catch (ArgumentException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
+                ValidateExceptionParameterName(ex, ParameterName);
+
+                // If value of ex.ParamName is expected, rethrow the ArgumentException to
+                // make the test pass.
                 throw;
             }
         }
@@ -257,7 +204,7 @@ namespace HelperTest
         [TestMethod]
         public void ParameterGuard_NullOrEmptyStringCheck_CheckNonEmptyAndNonNullValueWithGivenMessage_ShouldNotThrowException()
         {
-            ParameterGuard.NullOrEmptyStringCheck(NonEmptyString, ParameterName, Message);
+            ParameterGuard.NullOrEmptyStringCheck(NonEmptyString, ParameterName, CustomExceptionMessage);
         }
 
         [TestMethod]
@@ -272,34 +219,15 @@ namespace HelperTest
         {
             try
             {
-                ParameterGuard.NullOrEmptyStringCheck(null, ParameterName, Message);
+                ParameterGuard.NullOrEmptyStringCheck(null, ParameterName, CustomExceptionMessage);
             }
-            catch (ArgumentNullException ex) when (ex.ParamName == ParameterName && ex.Message == $"{Message}\r\nParameter name: {ParameterName}")
+            catch (ArgumentNullException ex) 
             {
-                // ParamName and Message are both expected. Just rethrow the ArgumentNullException and leave it to
-                // ExpectedException attribute.
-                throw;
-            }
-            catch (ArgumentNullException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentNullException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentNullException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
-                throw;
-            }
-            catch (ArgumentNullException ex) when (ex.Message != $"{Message}\r\nParameter name: {ParameterName}")
-            {
-                // ArgumentNullException is caught, but the Message is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentNullException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentNullException.Message)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentNullException.Message)}:<{Message}>. Actual:<{ex.Message}>.")
-                    .ToString());
+                ValidateExceptionParameterName(ex, ParameterName);
+                ValidateExceptionMessage(ex, GetExpectedExceptionMessage(ex, CustomExceptionMessage));
+
+                // If values of both ex.Message are ex.ParamName are expected, rethrow the ArgumentNullException to
+                // make the test pass.
                 throw;
             }
         }
@@ -312,21 +240,12 @@ namespace HelperTest
             {
                 ParameterGuard.NullOrEmptyStringCheck(null, ParameterName);
             }
-            catch (ArgumentNullException ex) when (ex.ParamName == ParameterName)
+            catch (ArgumentNullException ex)
             {
-                // ParamName is expected. Just rethrow the ArgumentNullException and leave it to ExpectedException
-                // attribute.
-                throw;
-            }
-            catch (ArgumentNullException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentNullException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentNullException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentNullException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
+                ValidateExceptionParameterName(ex, ParameterName);
+
+                // If value of both ex.ParamName is expected, rethrow the ArgumentNullException to
+                // make the test pass.
                 throw;
             }
         }
@@ -337,34 +256,15 @@ namespace HelperTest
         {
             try
             {
-                ParameterGuard.NullOrEmptyStringCheck(String.Empty, ParameterName, Message);
+                ParameterGuard.NullOrEmptyStringCheck(String.Empty, ParameterName, CustomExceptionMessage);
             }
-            catch (ArgumentException ex) when (ex.ParamName == ParameterName && ex.Message == $"{Message}\r\nParameter name: {ParameterName}")
+            catch (ArgumentException ex) 
             {
-                // ParamName and Message are both expected. Just rethrow the ArgumentNullException and leave it to
-                // ExpectedException attribute.
-                throw;
-            }
-            catch (ArgumentException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
-                throw;
-            }
-            catch (ArgumentException ex) when (ex.Message != $"{Message}\r\nParameter name: {ParameterName}")
-            {
-                // ArgumentException is caught, but the Message is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.Message)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.Message)}:<{Message}>. Actual:<{ex.Message}>.")
-                    .ToString());
+                ValidateExceptionParameterName(ex, ParameterName);
+                ValidateExceptionMessage(ex, GetExpectedExceptionMessage(ex, CustomExceptionMessage));
+
+                // If values of both ex.Message are ex.ParamName are expected, rethrow the ArgumentException to
+                // make the test pass.
                 throw;
             }
         }
@@ -377,21 +277,12 @@ namespace HelperTest
             {
                 ParameterGuard.NullOrEmptyStringCheck(String.Empty, ParameterName);
             }
-            catch (ArgumentException ex) when (ex.ParamName == ParameterName)
+            catch (ArgumentException ex)
             {
-                // ParamName is expected. Just rethrow the ArgumentNullException and leave it to ExpectedException 
-                // attribute.
-                throw;
-            }
-            catch (ArgumentException ex) when (ex.ParamName != ParameterName)
-            {
-                // ArgumentException is caught, but the ParamName is not expected. So, assert an failure before 
-                // rethrowing the exception.
-                Assert.Fail(new StringBuilder(300)
-                    .Append($"{nameof(ArgumentException)}, which is expected, is thrown. However, the value of ")
-                    .Append($"{nameof(ArgumentException.ParamName)} property is incorrect.\r\nExpected ")
-                    .Append($"{nameof(ArgumentException.ParamName)}:<{ParameterName}>. Actual:<{ex.ParamName}>.")
-                    .ToString());
+                ValidateExceptionParameterName(ex, ParameterName);
+
+                // If value of ex.ParamName is expected, rethrow the ArgumentException to
+                // make the test pass.
                 throw;
             }
         }
