@@ -38,8 +38,8 @@ namespace HelperTest
             {
                 Value = (int)d
             };
-            if (field.Value.GetType() != typeof(int))
-                Assert.Fail("Return value of integer-type FixedLengthField is not integer.");
+            Assert.AreEqual(typeof(int), field.Value.GetType(),
+                "Return value of integer-type FixedLengthField is not integer.");
         }
 
         [TestMethod]
@@ -141,17 +141,7 @@ namespace HelperTest
         public void FixedLengthInt32Field_ParsingIntegerWithNonNumericalCharacterShouldThrowFormatException()
         {
             var field = new FixedLengthInt32Field("Age", 3);
-            try
-            {
-                field.RawString = "99A";
-                Assert.Fail("Exception is expected, but no exception is thrown.");
-            }
-            catch (Exception ex) when (ex.InnerException is FormatException)
-            {
-                throw new FormatException(
-                    $"{nameof(FormatException)} was thrown. It is encapsulated by another exception. For more details about that exception, please refer to the InnerException property of this exception.", 
-                    ex);
-            }
+            field.RawString = "99A";
         }
     }
 }
