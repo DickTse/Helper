@@ -4,9 +4,14 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelperTest", "HelperTest\HelperTest.csproj", "{96B35977-C07F-4F2E-A813-F70B67774FF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{68D25759-AEF0-4D03-BE02-5F1BEA5214A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{68D25759-AEF0-4D03-BE02-5F1BEA5214A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperDemo", "HelperDemo\HelperDemo.csproj", "{EBEFC4EB-BE18-4538-89D6-B977C32FD242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelperDemo", "HelperDemo\HelperDemo.csproj", "{EBEFC4EB-BE18-4538-89D6-B977C32FD242}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9D49D431-CFE3-41E9-9637-619E1FD963EE}"
+	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.runsettings = CodeCoverage.runsettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
