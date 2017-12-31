@@ -2,7 +2,7 @@
 
 namespace Helper.Text
 {
-    public class NonFormattableFieldValidator<T> : IFixedLengthFieldValidator<T> where T : IConvertible
+    public class NonFormattableFieldValidator<T> : IFixedLengthFieldValidator<T>
     {
         public void ValidateRawString(string s)
         {

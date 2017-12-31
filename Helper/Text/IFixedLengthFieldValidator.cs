@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Helper.Text
+﻿namespace Helper.Text
 {
-    public interface IFixedLengthFieldValidator<T> where T : IConvertible
+    public interface IFixedLengthFieldValidator<T>
     {
         void ValidateRawString(string s); 
     }

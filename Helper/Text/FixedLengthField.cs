@@ -5,7 +5,7 @@ namespace Helper.Text
     /// <summary>
     /// A class for setting the definition of a fixed-length field and storing the value of the field.
     /// </summary>
-    public abstract class FixedLengthField<T> : IFixedLengthField where T : IConvertible
+    public abstract class FixedLengthField<T> : IFixedLengthField
     {
         /// <summary>
         /// The default value of <see cref="paddingChar"/>.
