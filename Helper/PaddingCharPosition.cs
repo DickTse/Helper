@@ -1,4 +1,4 @@
-namespace Helper.Text
+namespace Helper
 {
     /// <summary>
     /// This enumeration type declares a set of positions that a padding character can be padded into the value of

@@ -1,8 +1,7 @@
-﻿using Helper.Text;
+﻿using Helper;
+using Helper.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HelperTest
 {

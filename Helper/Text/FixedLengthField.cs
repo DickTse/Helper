@@ -10,7 +10,7 @@ namespace Helper.Text
         /// <summary>
         /// The default value of <see cref="PaddingChar"/>.
         /// </summary>
-        protected const char DefaultPaddingChar = ' ';
+        private const char DefaultPaddingChar = ' ';
 
         private IFixedLengthFieldConverter<T> converter;
 
@@ -40,7 +40,7 @@ namespace Helper.Text
         /// <summary>
         /// The position of the padding character to be padded to the field.
         /// </summary>
-        public PaddingCharPosition PaddingCharPosition { get; set; } = Text.PaddingCharPosition.Right;
+        public PaddingCharPosition PaddingCharPosition { get; set; } = PaddingCharPosition.Right;
 
         /// <summary>
         /// The backing field of <see cref="RawString"/>.
@@ -93,24 +93,11 @@ namespace Helper.Text
 
         private T GetValueFromRawString(string rawString)
         {
-            string trimmedString = TrimPaddingChar(rawString);
+            string trimmedString = rawString.TrimPaddingChar(PaddingCharPosition, PaddingChar);
             if (!String.IsNullOrEmpty(trimmedString))
                 return converter.Parse(trimmedString);
             else
                 return default(T);
-        }
-
-        private string TrimPaddingChar(string s)
-        {
-            switch (PaddingCharPosition)
-            {
-                case PaddingCharPosition.Left:
-                    return s?.TrimStart(PaddingChar);
-                case PaddingCharPosition.Right:
-                    return s?.TrimEnd(PaddingChar);
-                default:
-                    return null;
-            }
         }
 
         /// <summary>
@@ -123,31 +110,7 @@ namespace Helper.Text
             if (s.Length > Length)
                 return s.Substring(0, Length);
             else
-                return PadPaddingChar(s);
-        }
-
-        /// <summary>
-        /// Pad the <see cref="PaddingChar"/> into the string.
-        /// </summary>
-        /// <param name="s">The string that the <see cref="PaddingChar"/> is going to be padded to.</param>
-        /// <returns>
-        /// A string with <see cref="PaddingChar"/> padded into it.
-        /// </returns>
-        /// <remarks>
-        /// The <see cref="PaddingChar"/> can be padded to the left or the right of the string, subjected to the value
-        /// of <see cref="PaddingCharPosition"/>.
-        /// </remarks>
-        protected string PadPaddingChar(string s)
-        {
-            switch (PaddingCharPosition)
-            {
-                case PaddingCharPosition.Left:
-                    return s?.PadLeft(Length, PaddingChar);
-                case PaddingCharPosition.Right:
-                    return s?.PadRight(Length, PaddingChar);
-                default:
-                    return null;
-            }
+                return s.Pad(Length, PaddingCharPosition, PaddingChar);
         }
 
         /// <summary>

@@ -55,8 +55,9 @@ namespace Helper.Text
 
         public override string ToPaddedString()
         {
-            string formattedString = converter.ToString(InternalValue);
-            return PadPaddingChar(formattedString);
+            return converter
+                .ToString(InternalValue)
+                .Pad(Length, PaddingCharPosition, PaddingChar);
         }
     }
 }
