@@ -21,6 +21,8 @@ namespace Helper
 
         public static string TrimPaddingChar(this string s, PaddingCharPosition position, char paddingChar)
         {
+            ParameterGuard.NullCheck(s, nameof(s));
+
             switch (position)
             {
                 case PaddingCharPosition.Left:
