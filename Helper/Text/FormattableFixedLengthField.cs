@@ -25,36 +25,6 @@ namespace Helper.Text
             if (validator is IFormattableFixedLengthFieldValidator<T>)
                 ((IFormattableFixedLengthFieldValidator<T>)validator).Format = format;
         }
-
-        /// <summary>
-        /// Initialize a <see cref="FormattableFixedLengthField{T}"/> class to a field with a given field name and field length.
-        /// </summary>
-        /// <param name="name">Field name.</param>
-        /// <param name="length">
-        /// Length of field value, including all leading or trailing padding character.
-        /// </param>
-        public FormattableFixedLengthField(string name, int length) 
-            : this(name, length, null)
-        {
-        }
-
-        /// <summary>
-        /// Initialize a <see cref="FormattableFixedLengthField{T}"/> class to a field with a given field name, a format 
-        /// for formatting the string being parsed in and out the field, and field length.
-        /// </summary>
-        /// <param name="name">Field name.</param>
-        /// <param name="length">
-        /// Length of field value, including all leading or trailing padding character.
-        /// </param>
-        /// <param name="format">Format for formatting strings.</param>
-        /// <remarks>
-        /// Value of <paramref name="length"/> must not be shorter than the length of <paramref name="format"/>.
-        /// </remarks>
-        public FormattableFixedLengthField(string name, int length, string format)
-            : this(name, length, format, new FormattableFixedLengthFieldConverter<T>(), new FormattableFixedLengthFieldValidator<T>())
-        {
-        }
-
         /// <summary>
         /// Initialize a <see cref="FormattableFixedLengthField{T}"/> class to a field with a given field name, a format 
         /// for formatting the string being parsed in and out the field, and field length.

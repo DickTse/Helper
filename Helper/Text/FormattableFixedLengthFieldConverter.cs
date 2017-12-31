@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Helper.Text
 {
-    internal class FormattableFixedLengthFieldConverter<T> : IFormattableFixedLengthFieldConverter<T> where T : IConvertible, IFormattable
+    internal abstract class FormattableFixedLengthFieldConverter<T> : IFormattableFixedLengthFieldConverter<T> where T : IConvertible, IFormattable
     {
         public string Format { get; set; }
 
@@ -17,14 +17,8 @@ namespace Helper.Text
             return ToString(value, Format);
         }
 
-        public virtual T Parse(string s, string format)
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract T Parse(string s, string format);
 
-        public virtual T Parse(string s)
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract T Parse(string s);
     }
 }

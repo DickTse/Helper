@@ -2,13 +2,10 @@
 
 namespace Helper.Text
 {
-    public class FormattableFixedLengthFieldValidator<T> : IFormattableFixedLengthFieldValidator<T> where T : IConvertible, IFormattable
+    public abstract class FormattableFixedLengthFieldValidator<T> : IFormattableFixedLengthFieldValidator<T> where T : IConvertible, IFormattable
     {
         public string Format { get; set; }
 
-        public virtual void ValidateRawString(string s)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void ValidateRawString(string s);
     }
 }
