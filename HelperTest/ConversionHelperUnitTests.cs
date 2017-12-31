@@ -8,64 +8,103 @@ namespace HelperTest
     [TestCategory("Unit Test")]
     public class ConversionHelperUnitTests
     {
+        private const string RegularPositiveInt32String = "1";
+        private const string HugePositiveNumberString = "9999999999";
+        private const string TinyNegativeNumberString = "-9999999999";
+        private const string AlphabeticalCharacterString = "foo";
+        private const string NonNullString = "foo";
+        private const string NullString = null;
+
         [TestMethod]
-        public void ConversionHelper_TryParse_ParseNormalIntegerStringIntoInteger_ShouldReturnTrueAndAnInteger()
+        public void ConversionHelper_TryParse_ParseRegularInt32StringIntoInt32_ShouldReturnTrueAndParsedInt32Value()
         {
-            string s = "1";
+            string s = RegularPositiveInt32String;
             int expectedInt = Int32.Parse(s);
-            if (ConversionHelper.TryParse<int>(s, out int i))
-                Assert.AreEqual(expectedInt, i, 
-                    $"{nameof(ConversionHelper.TryParse)} returns an unexpected value in its out parameter even it returns true.");
-            else
-                Assert.Fail($"{nameof(ConversionHelper.TryParse)} returns false while parsing a normal integer.");
+            bool result = ConversionHelper.TryParse(s, out int i);
+            Assert.AreEqual(true, result);
+            Assert.AreEqual(expectedInt, i);
         }
 
         [TestMethod]
-        public void ConversionHelper_TryParse_ParseHugeNumberInStringIntoInteger_ShouldReturnFalseAndDefaultIntegerValue()
+        public void ConversionHelper_TryParse_ParseHugePositiveNumberStringIntoInt32_ShouldReturnFalseAndDefaultInt32Value()
         {
-            string s = "9999999999";
-            Int64 expectedInt = Int64.Parse(s);
-            bool result = ConversionHelper.TryParse<int>(s, out int i);
-            Assert.AreEqual(false, result, 
-                $"{nameof(ConversionHelper.TryParse)} does not return false even it tries to parse a string with a huge number in it to int32.");
-            Assert.AreEqual(default(int), i,
-                $"A non-default integer value is returned even TryParse fails to parse a string into int32.");
+            bool result = ConversionHelper.TryParse(HugePositiveNumberString, out int i);
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(default(int), i);
         }
 
         [TestMethod]
-        public void ConversionHelper_TryParse_ParseTinyNegativeNumberInStringIntoInteger_ShouldReturnFalseAndDefaultIntegerValue()
+        public void ConversionHelper_TryParse_ParseTinyNegativeNumberStringIntoInt32_ShouldReturnFalseAndDefaultInt32Value()
         {
-            string s = "-9999999999";
-            Int64 expectedInt = Int64.Parse(s);
-            bool result = ConversionHelper.TryParse<int>(s, out int i);
-            Assert.AreEqual(false, result,
-                $"{nameof(ConversionHelper.TryParse)} does not return false even it tries to parse a string with a tiny negative number in it to int32.");
-            Assert.AreEqual(default(int), i,
-                $"A non-default integer value is returned even TryParse fails to parse a string into int32.");
+            bool result = ConversionHelper.TryParse(TinyNegativeNumberString, out int i);
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(default(int), i);
         }
 
         [TestMethod]
-        public void ConversionHelper_CanParse_ParseNormalIntegerStringIntoInteger_ShouldReturnTrue()
+        public void ConversionHelper_TryParse_ParseNullStringToInt32_ShouldReturnFalseAndDefaultInt32Value()
         {
-            string s = "1";
-            if (!(ConversionHelper.CanParse<int>(s)))
-                Assert.Fail($"{nameof(ConversionHelper.CanParse)} returns false while parsing a normal integer.");
+            bool result = ConversionHelper.TryParse(NullString, out int i);
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(default(int), i);
         }
 
         [TestMethod]
-        public void ConversionHelper_CanParse_ParseHugeNumberInStringIntoInteger_ShouldReturnFalse()
+        public void ConversionHelper_TryParse_ParseAlphabeticalCharacterToInteger_ShouldReturnFalseAndDefaultInt32Value()
         {
-            string s = "9999999999";
-            if (ConversionHelper.CanParse<int>(s))
-                Assert.Fail($"{nameof(ConversionHelper.CanParse)} does not return false while parsing a huge number into an integer.");
+            bool result = ConversionHelper.TryParse(AlphabeticalCharacterString, out int i);
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(default(int), i);
         }
 
         [TestMethod]
-        public void ConversionHelper_CanParse_ParseTinyNegativeNumberInStringIntoInteger_ShouldReturnFalse()
+        public void ConversionHelper_TryParse_ParseNonNullStringToObjectCannotBeConvertedFromString_ShouldReturnFalseAndDefaultValue()
         {
-            string s = "-9999999999";
-            if (ConversionHelper.CanParse<int>(s))
-                Assert.Fail($"{nameof(ConversionHelper.CanParse)} does not return false while parsing a tiny negative number into an integer.");
+            bool result = ConversionHelper.TryParse(NonNullString, out object o);
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(default(object), o);
+        }
+
+        [TestMethod]
+        public void ConversionHelper_CanParse_ParseRegularInt32StringIntoInt32_ShouldReturnTrue()
+        {
+            bool result = ConversionHelper.CanParse<int>(RegularPositiveInt32String);
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void ConversionHelper_CanParse_ParseHugePositiveNumberStringIntoInt32_ShouldReturnFalse()
+        {
+            bool result = ConversionHelper.CanParse<int>(HugePositiveNumberString);
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void ConversionHelper_CanParse_ParseTinyNegativeNumberStringIntoInt32_ShouldReturnFalse()
+        {
+            bool result = ConversionHelper.CanParse<int>(TinyNegativeNumberString);
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void ConversionHelper_CanParse_ParseNullStringToInt32_ShouldReturnFalse()
+        {
+            bool result = ConversionHelper.CanParse<int>(NullString);
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void ConversionHelper_CanParse_ParseAlphabeticalCharacterStringToInt32_ShouldReturnFalse()
+        {
+            bool result = ConversionHelper.CanParse<int>(AlphabeticalCharacterString);
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void ConversionHelper_CanParse_ParseNonNullStringToObject_ShouldReturnFalse()
+        {
+            bool result = ConversionHelper.CanParse<object>(NonNullString);
+            Assert.AreEqual(false, result);
         }
     }
 }
