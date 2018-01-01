@@ -1,5 +1,6 @@
 using Helper.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace HelperTest
 {
@@ -7,10 +8,57 @@ namespace HelperTest
     [TestClass]
     public class FixedLengthFieldStringUnitTest
     {
-        #region Unit tests for testing validations of the whole raw string
+        [TestMethod]
+        public void FixedLengthFieldString_ParseStringsIntoMultipleFixedLengthFieldsUsingConstructor_ShouldBeParsedSuccessfully()
+        {
+            FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
+            {
+                new FixedLengthStringField("HKID", 10),
+                new FixedLengthStringField("Name", 20)
+            };
+            string rawStr = "A123456(7)CHAN TAI MAN        ";
+            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
+            Assert.AreEqual("A123456(7)", fixedStr.Fields["HKID"]);
+            Assert.AreEqual("CHAN TAI MAN", fixedStr.Fields["Name"]);
+        }
+
+        [TestMethod]
+        public void FixedLengthFieldString_ParseStringIntoMultipleFixedLengthFieldsUsingParseMethod_ShouldBeParsedSuccessfully()
+        {
+            FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
+            {
+                new FixedLengthStringField("HKID", 10),
+                new FixedLengthStringField("Name", 20),
+                new FixedLengthInt32Field("Age", 3),
+                new FixedLengthDateTimeField("DOB")
+            };
+            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields);
+            string rawStr = "A123456(7)CHAN TAI MAN        32 19850305";
+            fixedStr.Parse(rawStr);
+            Assert.AreEqual("A123456(7)", fixedStr.Fields["HKID"]);
+            Assert.AreEqual("CHAN TAI MAN", fixedStr.Fields["Name"]);
+            Assert.AreEqual(32, fixedStr.Fields["Age"]);
+            Assert.AreEqual(new DateTime(1985, 3, 5), fixedStr.Fields["DOB"]);
+        }
+
+        [TestMethod]
+        public void FixedLengthFieldString_AssignValueToEachField_ToStringMethodShouldReturnExpectedString()
+        {
+            FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
+            {
+                new FixedLengthStringField("HKID", 10) {Value = "A123456(7)"},
+                new FixedLengthStringField("Name", 20) {Value = "CHAN TAI MAN"},
+                new FixedLengthInt32Field("Age", 3) {Value = 32},
+                new FixedLengthDateTimeField("DOB") {Value = new DateTime(1985, 3, 5)}
+            };
+            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields);
+            string expectedStr = "A123456(7)CHAN TAI MAN        32 19850305";
+            Assert.AreEqual(expectedStr, fixedStr.ToString());
+        }
+
         [TestMethod]
         [ExpectedException(typeof(MalformedRawStringException))]
-        public void FixedLengthFieldString_RawStringTooShortShouldThrowMalformedRawStringException()
+        public void FixedLengthFieldString_RawStringTooShort_ShouldThrowMalformedRawStringException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
                 new FixedLengthStringField("HKID", 10),
@@ -30,7 +78,7 @@ namespace HelperTest
 
         [TestMethod]
         [ExpectedException(typeof(MalformedRawStringException))]
-        public void FixedLengthFieldString_RawStringTooLongShouldThrowMalformedRawStringException()
+        public void FixedLengthFieldString_RawStringTooLong_ShouldThrowMalformedRawStringException()
         {
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
                 new FixedLengthStringField("HKID", 10),
@@ -46,47 +94,6 @@ namespace HelperTest
                 Assert.AreEqual("The raw string is too long.", ex.Message);
                 throw;
             }
-        }
-        #endregion
-
-        #region Unit tests for testing parsing of string into FixedLengthField.
-        [TestMethod]
-        public void FixedLengthFieldString_SingleStringIsParsedIntoFixedLengthFieldSuccessfully()
-        {
-            FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthStringField("HKID", 10)
-            };
-            string rawStr = "A123456(7)";
-            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
-            Assert.AreEqual("A123456(7)", fixedStr.Fields["HKID"]);
-        }
-        #endregion
-
-        #region Unit tests for testing parsing of integer into FixedLengthField.
-        [TestMethod]
-        public void FixedLengthFieldString_SingleIntegerIsParsedIntoFixedLengthFieldSuccessfully()
-        {
-            FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
-                new FixedLengthInt32Field("Age", 3)
-            };
-            string rawStr = "100";
-            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
-            Assert.AreEqual(100, fixedStr.Fields["Age"]);
-        }
-        #endregion
-
-        [TestMethod]
-        public void FixedLengthFieldString_MultipleStringsAreAllParsedIntoFixedLengthFieldsSuccessfully()
-        {
-            FixedLengthFieldCollection fields = new FixedLengthFieldCollection()
-            {
-                new FixedLengthStringField("HKID", 10),
-                new FixedLengthStringField("Name", 20)
-            };
-            string rawStr = "A123456(7)CHAN TAI MAN        ";
-            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
-            Assert.AreEqual("A123456(7)", fixedStr.Fields["HKID"]);
-            Assert.AreEqual("CHAN TAI MAN", fixedStr.Fields["Name"]);
         }
     }
 }
