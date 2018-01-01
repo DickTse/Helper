@@ -16,10 +16,9 @@ namespace Helper.Text
         public FixedLengthFieldCollection Fields { get; private set; }
 
         /// <summary>
-        /// Initalizes a <see cref="FixedLengthFieldString"/> object with a given set of field definitions. This
-        /// constructor is essential for assembling a set of <see cref="IFixedLengthField"/> fields to build a string.
+        /// Initalizes a <see cref="FixedLengthFieldString"/> object with a definition of a set of fixed-length fields.
         /// </summary>
-        /// <param name="fields">A set of defintions that defines the fields in the string.</param>
+        /// <param name="fields">Defintion of fields in the string.</param>
         public FixedLengthFieldString(FixedLengthFieldCollection fields)
         {
             ParameterGuard.NullCheck(fields, nameof(fields));
@@ -27,23 +26,26 @@ namespace Helper.Text
         }
 
         /// <summary>
-        /// Initalizes a <see cref="FixedLengthFieldString"/> object with a given raw string and a given set of field 
-        /// definitions, and parsing the raw string and split it into <see cref="IFixedLengthField"/> fields.
+        /// Initalizes a <see cref="FixedLengthFieldString"/> object with a definition of a set of fixed-length fields
+        /// and a string. The string will be parsed and values stored in the string will be assigned to the fields.
         /// </summary>
-        /// <param name="rawString">The raw string, which contains the values of a number of fixed-length fields.</param>
-        /// <param name="fields">A set of defintions that defines the fields in the string.</param>
-        public FixedLengthFieldString(FixedLengthFieldCollection fields, string rawString)
+        /// <param name="fields">Defintion of fields in the string.</param>
+        /// <param name="s">The string to be parsed in to the fields.</param>
+        public FixedLengthFieldString(FixedLengthFieldCollection fields, string s)
         {
-            ParameterGuard.NullCheck(rawString, nameof(rawString));
+            ParameterGuard.NullCheck(s, nameof(s));
             ParameterGuard.NullCheck(fields, nameof(fields));
-
             Fields = fields;
-            this.rawString = rawString;
-            ParseRawString();
+            Parse(s);
         }
 
-        private void ParseRawString()
+        /// <summary>
+        /// Parse a string and assign the values to fixed-length fields defined in <see cref="Fieilds"/> property.
+        /// </summary>
+        /// <param name="s">The string to be parsed.</param>
+        public void Parse(string s)
         {
+            rawString = s;
             ValidateRawString();
             SplitRawStringIntoFields();
         }
