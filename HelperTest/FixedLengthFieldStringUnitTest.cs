@@ -19,7 +19,7 @@ namespace HelperTest
             string rawStr = "A123456CHAN TAI MAN";
             try
             {
-                new FixedLengthFieldString(rawStr, fields);
+                new FixedLengthFieldString(fields, rawStr);
             }
             catch (MalformedRawStringException ex)
             {
@@ -39,7 +39,7 @@ namespace HelperTest
             string rawStr = "A123456(7)CHAN TAI MAN";
             try
             {
-                new FixedLengthFieldString(rawStr, fields);
+                new FixedLengthFieldString(fields, rawStr);
             }
             catch (MalformedRawStringException ex)
             {
@@ -57,7 +57,7 @@ namespace HelperTest
                 new FixedLengthStringField("HKID", 10)
             };
             string rawStr = "A123456(7)";
-            FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
+            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
             Assert.AreEqual("A123456(7)", fixedStr.Fields["HKID"]);
         }
         #endregion
@@ -70,7 +70,7 @@ namespace HelperTest
                 new FixedLengthInt32Field("Age", 3)
             };
             string rawStr = "100";
-            FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
+            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
             Assert.AreEqual(100, fixedStr.Fields["Age"]);
         }
         #endregion
@@ -84,7 +84,7 @@ namespace HelperTest
                 new FixedLengthStringField("Name", 20)
             };
             string rawStr = "A123456(7)CHAN TAI MAN        ";
-            FixedLengthFieldString fixedStr = new FixedLengthFieldString(rawStr, fields);
+            FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, rawStr);
             Assert.AreEqual("A123456(7)", fixedStr.Fields["HKID"]);
             Assert.AreEqual("CHAN TAI MAN", fixedStr.Fields["Name"]);
         }

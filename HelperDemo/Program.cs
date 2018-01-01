@@ -144,13 +144,12 @@ namespace Helper.Demo
                 new FixedLengthStringField("HKID", 10),
                 new FixedLengthStringField("Name", 20),
                 new FixedLengthInt32Field("Age", 3),
-                //new FixedLengthField<DateTime>("DOB", 8) { DateTimeFormatString = "ddMMyyyy" }
                 new FixedLengthDateTimeField("DOB", "ddMMyyyy")
             };
 
             foreach (string row in rows)
             {
-                FixedLengthFieldString fixedStr = new FixedLengthFieldString(row, fields);
+                FixedLengthFieldString fixedStr = new FixedLengthFieldString(fields, row);
                 foreach (IFixedLengthField field in fixedStr.Fields)
                     Console.WriteLine(field.Name + ": |" + field.Value + "|");
             }
@@ -173,10 +172,10 @@ namespace Helper.Demo
             FixedLengthFieldCollection fields = new FixedLengthFieldCollection() {
                 new FixedLengthStringField("UID", 22) { Value = "2017052200410030001100" },
                 new FixedLengthInt64Field("Amount", 13) { PaddingCharPosition = PaddingCharPosition.Left, PaddingChar = '0', Value = 1234 },
-                new FixedLengthDateTimeField("ChequeDate", 20) 
+                new FixedLengthDateTimeField("ChequeDate", 20)
                 {
-                    PaddingCharPosition = PaddingCharPosition.Left, 
-                    Value = DateTime.ParseExact("20170301", "yyyyMMdd", CultureInfo.InvariantCulture) 
+                    PaddingCharPosition = PaddingCharPosition.Left,
+                    Value = new DateTime(2017, 3, 1)
                 }
             };
             foreach (var field in fields)

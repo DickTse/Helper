@@ -16,18 +16,29 @@ namespace Helper.Text
         public FixedLengthFieldCollection Fields { get; private set; }
 
         /// <summary>
+        /// Initalizes a <see cref="FixedLengthFieldString"/> object with a given set of field definitions. This
+        /// constructor is essential for assembling a set of <see cref="IFixedLengthField"/> fields to build a string.
+        /// </summary>
+        /// <param name="fields">A set of defintions that defines the fields in the string.</param>
+        public FixedLengthFieldString(FixedLengthFieldCollection fields)
+        {
+            ParameterGuard.NullCheck(fields, nameof(fields));
+            Fields = fields;
+        }
+
+        /// <summary>
         /// Initalizes a <see cref="FixedLengthFieldString"/> object with a given raw string and a given set of field 
         /// definitions, and parsing the raw string and split it into <see cref="IFixedLengthField"/> fields.
         /// </summary>
         /// <param name="rawString">The raw string, which contains the values of a number of fixed-length fields.</param>
         /// <param name="fields">A set of defintions that defines the fields in the string.</param>
-        public FixedLengthFieldString(string rawString, FixedLengthFieldCollection fields)
+        public FixedLengthFieldString(FixedLengthFieldCollection fields, string rawString)
         {
             ParameterGuard.NullCheck(rawString, nameof(rawString));
             ParameterGuard.NullCheck(fields, nameof(fields));
 
+            Fields = fields;
             this.rawString = rawString;
-            this.Fields = fields;
             ParseRawString();
         }
 
@@ -53,16 +64,6 @@ namespace Helper.Text
                 field.RawString = s.Substring(0, field.Length);
                 s = s.Substring(field.Length);
             }
-        }
-
-        /// <summary>
-        /// Initalizes a <see cref="FixedLengthFieldString"/> object with a given set of field definitions. This
-        /// constructor is essential for assembling a set of <see cref="IFixedLengthField"/> fields to build a string.
-        /// </summary>
-        /// <param name="fields">A set of defintions that defines the fields in the string.</param>
-        public FixedLengthFieldString(FixedLengthFieldCollection fields)
-        {
-            this.Fields = fields;
         }
 
         /// <summary>
