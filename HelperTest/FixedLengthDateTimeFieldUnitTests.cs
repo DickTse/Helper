@@ -10,7 +10,7 @@ namespace HelperTest
     public class FixedLengthDateTimeFieldUnitTests
     {
         [TestMethod]
-        public void FixedLengthDateTimeField_ParsingDateInStringWithLeadingSpace_ShouldReturnTheSameDateTimeValue()
+        public void FixedLengthDateTimeField_ParseDateInString_ShouldReturnTheSameDateTimeValue()
         {
             var field = new FixedLengthDateTimeField("DOB")
             {
@@ -21,7 +21,7 @@ namespace HelperTest
         }
 
         [TestMethod]
-        public void FixedLengthDateTimeField_ParsingTimeInStringWithLeadingSpaceShouldReturnTheSameDateTimeValue()
+        public void FixedLengthDateTimeField_ParseDateTimeString_ShouldReturnTheSameDateTimeValue()
         {
             DateTime dt = new DateTime(1985, 10, 13, 23, 59, 59, 999);
             var field = new FixedLengthDateTimeField("StartTime", "yyyyMMddHHmmssfff")
@@ -33,7 +33,7 @@ namespace HelperTest
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void FixedLengthDateTimeField_ParsingDateTimeInStringWithInvalidDateTimeFormatShouldThrowFormatException()
+        public void FixedLengthDateTimeField_ParseDateTimeInStringWithInvalidFormat_ShouldThrowFormatException()
         {
             var field = new FixedLengthDateTimeField("DOB", "abcdef")
             {
