@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Helper
+namespace Helper.AOP
 {
     /// <summary>
     /// Provides static methods for validating parameter values.

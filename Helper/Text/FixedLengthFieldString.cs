@@ -1,3 +1,4 @@
+using Helper.AOP;
 using System.Linq;
 
 namespace Helper.Text

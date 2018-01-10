@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper.AOP;
+using System;
 
 namespace Helper
 {
