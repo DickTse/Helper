@@ -50,9 +50,7 @@ namespace Helper
         public static void EmptyStringCheck(string s, string paramName, 
             string message = "String parameter must not be empty.")
         {
-            if (s is null)
-                return;     // null is valid for this checking.
-            if (s.Length == 0)
+            if (s?.Length == 0)
                 throw new ArgumentException(message, paramName);
         }
 
