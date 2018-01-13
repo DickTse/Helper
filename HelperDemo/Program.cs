@@ -1,10 +1,10 @@
-﻿using Helper.Configuration;
+﻿using Helper.AOP;
+using Helper.Configuration;
 using Helper.Performance;
 using Helper.Text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 
 namespace Helper.Demo
 {
@@ -12,27 +12,30 @@ namespace Helper.Demo
     {
         static void Main(string[] args)
         {
-            DemoBenchmarkTimer();
-            Console.WriteLine();
-            ConsoleHelper.Pause();
-            Console.WriteLine();
-            DemoEventHandlerHelperRaise();
-            Console.WriteLine();
-            ConsoleHelper.Pause();
-            Console.WriteLine();
-            // DemoReadConfigurationsFromIniFile("C:\\temp\\test.ini");
-            // Console.WriteLine();
-            // ConsoleHelper.Pause();
-            // Console.WriteLine();
-            DemoBuildingFixedFieldStringFromGivenRawStrings();
-            Console.WriteLine();
-            ConsoleHelper.Pause();
-            Console.WriteLine();
-            DemoBuildingStringFromGivenFixedLengthFieldValues();
-            Console.WriteLine();
-            ConsoleHelper.Pause();
-            Console.WriteLine();
-            DemoChangingFieldValueByUsingIndexerProperty();
+            //DemoBenchmarkTimer();
+            //Console.WriteLine();
+            //ConsoleHelper.Pause();
+            //Console.WriteLine();
+            //DemoEventHandlerHelperRaise();
+            //Console.WriteLine();
+            //ConsoleHelper.Pause();
+            //Console.WriteLine();
+            //DemoReadConfigurationsFromIniFile("C:\\temp\\test.ini");
+            //Console.WriteLine();
+            //ConsoleHelper.Pause();
+            //Console.WriteLine();
+            //DemoBuildingFixedFieldStringFromGivenRawStrings();
+            //Console.WriteLine();
+            //ConsoleHelper.Pause();
+            //Console.WriteLine();
+            //DemoBuildingStringFromGivenFixedLengthFieldValues();
+            //Console.WriteLine();
+            //ConsoleHelper.Pause();
+            //Console.WriteLine();
+            //DemoChangingFieldValueByUsingIndexerProperty();
+            //Console.WriteLine();
+            //ConsoleHelper.Pause();
+            DemoLogger();
             Console.WriteLine();
             ConsoleHelper.Pause();
         }
@@ -222,6 +225,15 @@ namespace Helper.Demo
             Console.WriteLine("Raw String: " + new FixedLengthFieldString(fields));
             Console.WriteLine();
             Console.WriteLine($"Elapsed time: {sw.Elapsed}.");
+        }
+
+        private static void DemoLogger()
+        {
+            LogPolicy.Register(new DemoLogger());
+            LogPolicy.Log(LogDefinition.ApplicationLaunch, "Helper Demo");
+            LogPolicy.Log(HelperDemoLogDefintion.Foo);
+            LogPolicy.Log(HelperDemoLogDefintion.Bar);
+            LogPolicy.Log(LogDefinition.ApplicationExit, "Helper Demo");
         }
     }
 }
